@@ -242,7 +242,7 @@ fn match_pattern_inner(
 
 ///|
 /// Find index of substring in string (case-sensitive)
-fn string_index_of(s : String, sub : String) -> Int? {
+fn string_index_of(s : String, sub : String) -> Int32? {
   if sub.length() == 0 {
     return Some(0)
   }
@@ -266,7 +266,7 @@ fn string_index_of(s : String, sub : String) -> Int? {
 
 ///|
 /// Get substring from start index
-fn string_substring(s : String, start : Int) -> String {
+fn string_substring(s : String, start : Int32) -> String {
   if start >= s.length() {
     return ""
   }
@@ -297,7 +297,7 @@ pub fn Map::single_glob(self : Map, pattern : Array[String]) -> Array[Field] {
 priv struct GlobTarget {
   field : Field
   parent_map : Map
-  level : Int
+  level : Int32
 }
 
 ///|
@@ -309,7 +309,7 @@ fn Map::glob_targets(self : Map, pattern : Array[String]) -> Array[GlobTarget] {
     self.collect_multi_glob_targets(targets, true, 0)
   } else {
     for field in self.single_glob(pattern) {
-      targets.push({ field, parent_map: self, level: 0 })
+      targets.push({ field, parent_map: self, level: 0, })
     }
   }
   targets
@@ -320,7 +320,7 @@ fn Map::collect_multi_glob_targets(
   self : Map,
   targets : Array[GlobTarget],
   include_boards : Bool,
-  level : Int,
+  level : Int32,
 ) -> Unit {
   let snapshot = self.fields.copy()
   for field in snapshot {
@@ -356,7 +356,7 @@ fn Map::collect_multi_glob_targets(
       }
       continue
     }
-    targets.push({ field, parent_map: self, level })
+    targets.push({ field, parent_map: self, level, })
     match child_map {
       Some(map) =>
         map.collect_multi_glob_targets(targets, include_boards, level + 1)
@@ -376,7 +376,7 @@ pub struct FilterContext {
 
 ///|
 pub fn FilterContext::new(field : Field, parent_map : Map) -> FilterContext {
-  { field, parent_map }
+  { field, parent_map, }
 }
 
 ///|
@@ -395,7 +395,7 @@ fn evaluate_filter_at_level(
   ctx : FilterContext,
   filter_key : String,
   filter_value : String,
-  level : Int,
+  level : Int32,
 ) -> Bool {
   // Check simple property filters
   match filter_key.to_lower() {
@@ -741,7 +741,7 @@ fn clone_irarray_for_properties(a : IRArray) -> IRArray {
   for v in a.values {
     values.push(clone_value_for_properties(v))
   }
-  { values, ast: a.ast, source_path: a.source_path, path: a.path }
+  { values, ast: a.ast, source_path: a.source_path, path: a.path, }
 }
 
 ///|

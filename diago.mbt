@@ -16,19 +16,21 @@
 /// Public facade API for parsing and compiling diago sources.
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum OutputMode {
   Svg
   Ascii
   Unicode
-} derive(Debug, Eq)
+}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum LayoutEngine {
   Auto
   Dagre
   Elk
   Railway
-} derive(Debug, Eq)
+}
 
 ///|
 pub struct ParseOptions {
@@ -37,7 +39,7 @@ pub struct ParseOptions {
 
 ///|
 pub fn ParseOptions::new() -> ParseOptions {
-  { import_resolver: None }
+  { import_resolver: None, }
 }
 
 ///|
@@ -53,7 +55,7 @@ pub struct LayoutPlugin(
   (@graph.GraphInput, @engine_api.LayoutConfig, @engine_api.Direction) -> Result[
     @graph.GraphInput,
     String,
-  ]
+  ],
 )
 
 ///|
@@ -106,7 +108,7 @@ pub struct CompileOptions {
   route_plugin : RoutePlugin?
   parse_options : ParseOptions
   theme_name : String?
-  dark_theme_id : Int?
+  dark_theme_id : Int32?
   sketch : Bool?
   pad : Double?
   center : Bool?
@@ -209,7 +211,7 @@ pub fn CompileOptions::with_theme_name(
 ///|
 pub fn CompileOptions::with_dark_theme_id(
   self : CompileOptions,
-  dark_theme_id : Int?,
+  dark_theme_id : Int32?,
 ) -> CompileOptions {
   { ..self, dark_theme_id, }
 }
@@ -287,6 +289,7 @@ pub fn CompileOptions::with_omit_version(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) suberror DiagoError {
   ParseError(String)
   IOError(String)
@@ -297,12 +300,12 @@ pub(all) suberror DiagoError {
   ConfigError(String)
   TargetError(String)
   UnsupportedFeature(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn parse(
   source : String,
-  options? : ParseOptions = ParseOptions::new(),
+  options~ : ParseOptions = ParseOptions::new(),
 ) -> @ir.Map raise DiagoError {
   match
     @compiler.compile_ir(source, options=to_compiler_parse_options(options)) {
@@ -314,7 +317,7 @@ pub fn parse(
 ///|
 pub fn compile_diagram(
   source : String,
-  options? : CompileOptions = CompileOptions::new(),
+  options~ : CompileOptions = CompileOptions::new(),
 ) -> @diagram.Diagram raise DiagoError {
   let compiled = match
     @compiler.compile_graph(
@@ -339,7 +342,7 @@ pub fn compile_diagram(
 ///|
 pub fn compile(
   source : String,
-  options? : CompileOptions = CompileOptions::new(),
+  options~ : CompileOptions = CompileOptions::new(),
 ) -> String raise DiagoError {
   let diagram = compile_diagram(source, options~)
   match @lib.render(diagram, options=to_lib_render_options(options)) {

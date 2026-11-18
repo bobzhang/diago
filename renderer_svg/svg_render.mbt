@@ -28,6 +28,7 @@ pub enum RenderPass {
 
 ///|
 /// SVG rendering configuration
+#derive(Debug)
 pub struct SvgConfig {
   /// Padding around the entire diagram
   padding : Double
@@ -38,7 +39,7 @@ pub struct SvgConfig {
   /// Default font family
   font_family : String
   /// Default font size
-  font_size : Int
+  font_size : Int32
   /// Background color
   background : String
   /// Default stroke color
@@ -50,9 +51,9 @@ pub struct SvgConfig {
   /// Arrow size
   arrow_size : Double
   /// Theme ID (0 = default)
-  theme_id : Int
+  theme_id : Int32
   /// Optional dark theme ID.
-  dark_theme_id : Int?
+  dark_theme_id : Int32?
   /// Light theme color overrides.
   theme_overrides : @diagram.ThemeOverrides?
   /// Dark theme color overrides.
@@ -65,7 +66,7 @@ pub struct SvgConfig {
   salt : String?
   /// Omit version metadata on root element.
   omit_version : Bool
-} derive(Debug)
+}
 
 ///|
 pub fn SvgConfig::new() -> SvgConfig {
@@ -94,7 +95,7 @@ pub fn SvgConfig::new() -> SvgConfig {
 
 ///|
 /// Create config with a specific theme
-pub fn SvgConfig::with_theme(theme_id : Int) -> SvgConfig {
+pub fn SvgConfig::with_theme(theme_id : Int32) -> SvgConfig {
   let theme = @themes.get_theme(theme_id)
   let font = if theme.rules.mono { "monospace" } else { "Arial, sans-serif" }
   {
@@ -135,7 +136,7 @@ pub fn SvgConfig::with_theme_name(name : String) -> SvgConfig {
 /// Apply render-time options on top of a base theme config.
 pub fn SvgConfig::with_render_options(
   self : SvgConfig,
-  dark_theme_id : Int?,
+  dark_theme_id : Int32?,
   theme_overrides : @diagram.ThemeOverrides?,
   dark_theme_overrides : @diagram.ThemeOverrides?,
   center : Bool,
@@ -202,7 +203,7 @@ fn style_double(value : @graph.StyleValue?, default : Double) -> Double {
 }
 
 ///|
-fn style_int(value : @graph.StyleValue?, default : Int) -> Int {
+fn style_int(value : @graph.StyleValue?, default : Int32) -> Int32 {
   match value {
     Some(v) => v.as_int().unwrap_or(default)
     None => default
@@ -235,7 +236,7 @@ fn style_is_mono(value : @graph.StyleValue?) -> Bool {
 }
 
 ///|
-fn container_label_size(level : Int) -> Int {
+fn container_label_size(level : Int32) -> Int32 {
   if level <= 1 {
     28
   } else if level == 2 {
@@ -248,7 +249,7 @@ fn container_label_size(level : Int) -> Int {
 }
 
 ///|
-fn default_object_font_size(obj : Shape, config : SvgConfig) -> Int {
+fn default_object_font_size(obj : Shape, config : SvgConfig) -> Int32 {
   if obj.shape_type == Class || obj.shape_type == SqlTable {
     20
   } else if is_container(obj) && obj.shape_type != Text {
@@ -622,7 +623,7 @@ fn object_precomputed_label_dims(obj : Shape) -> (Double, Double)? {
 fn object_label_dims(
   obj : Shape,
   text : String,
-  font_size : Int,
+  font_size : Int32,
   is_mono : Bool,
   is_bold : Bool,
   is_italic : Bool,
@@ -809,7 +810,7 @@ fn markdown_label_layout(
   box : Box,
   layout_engine : String,
   config : SvgConfig,
-) -> (Double, Double, Int, Int) {
+) -> (Double, Double, Int32, Int32) {
   let font_size = style_int(
     obj.style.font_size,
     default_object_font_size(obj, config),
@@ -849,7 +850,7 @@ fn markdown_label_layout(
 }
 
 ///|
-fn min_int(a : Int, b : Int) -> Int {
+fn min_int(a : Int32, b : Int32) -> Int32 {
   if a < b {
     a
   } else {
@@ -858,7 +859,7 @@ fn min_int(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn max_int(a : Int, b : Int) -> Int {
+fn max_int(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -872,7 +873,7 @@ fn d2_icon_position_is_outside(position : String) -> Bool {
 }
 
 ///|
-fn d2_get_icon_size(box : Box, position : String) -> Int {
+fn d2_get_icon_size(box : Box, position : String) -> Int32 {
   let min_dimension = min_int(box.width.to_int(), box.height.to_int())
   let half_min_dimension = (min_dimension + 1) / 2
   let mut size = if position == D2_DEFAULT_ICON_POSITION {
@@ -1088,7 +1089,7 @@ fn style_color(
 }
 
 ///|
-fn hex_digit_value(c : Char) -> Int? {
+fn hex_digit_value(c : Char) -> Int32? {
   let code = c.to_int()
   if code >= '0'.to_int() && code <= '9'.to_int() {
     Some(code - '0'.to_int())
@@ -1102,7 +1103,7 @@ fn hex_digit_value(c : Char) -> Int? {
 }
 
 ///|
-fn parse_hex_byte(high : Char, low : Char) -> Int? {
+fn parse_hex_byte(high : Char, low : Char) -> Int32? {
   match hex_digit_value(high) {
     Some(hi) =>
       match hex_digit_value(low) {
@@ -1114,7 +1115,7 @@ fn parse_hex_byte(high : Char, low : Char) -> Int? {
 }
 
 ///|
-fn char_at(s : String, index : Int) -> Char? {
+fn char_at(s : String, index : Int32) -> Char? {
   if index < 0 || index >= s.length() {
     return None
   }
@@ -1130,7 +1131,7 @@ fn starts_with_hash(s : String) -> Bool {
 }
 
 ///|
-fn parse_hex_pair_at(s : String, index : Int) -> Int? {
+fn parse_hex_pair_at(s : String, index : Int32) -> Int32? {
   match char_at(s, index) {
     Some(high) =>
       match char_at(s, index + 1) {
@@ -1142,7 +1143,7 @@ fn parse_hex_pair_at(s : String, index : Int) -> Int? {
 }
 
 ///|
-fn parse_hex_nibble_at(s : String, index : Int) -> Int? {
+fn parse_hex_nibble_at(s : String, index : Int32) -> Int32? {
   match char_at(s, index) {
     Some(c) => hex_digit_value(c)
     None => None
@@ -1150,7 +1151,7 @@ fn parse_hex_nibble_at(s : String, index : Int) -> Int? {
 }
 
 ///|
-fn parse_hex_color(color : String) -> (Int, Int, Int)? {
+fn parse_hex_color(color : String) -> (Int32, Int32, Int32)? {
   if color.length() == 7 && starts_with_hash(color) {
     match parse_hex_pair_at(color, 1) {
       Some(r) =>
@@ -1183,7 +1184,7 @@ fn parse_hex_color(color : String) -> (Int, Int, Int)? {
 }
 
 ///|
-fn hex_digit_char(v : Int) -> Char {
+fn hex_digit_char(v : Int32) -> Char {
   match v {
     0 => '0'
     1 => '1'
@@ -1206,7 +1207,7 @@ fn hex_digit_char(v : Int) -> Char {
 }
 
 ///|
-fn hex_byte_string(v : Int) -> String {
+fn hex_byte_string(v : Int32) -> String {
   let clamped = if v < 0 { 0 } else if v > 255 { 255 } else { v }
   let hi = clamped / 16
   let lo = clamped % 16
@@ -1259,7 +1260,7 @@ fn darken_theme_color_token(token : String) -> String? {
 }
 
 ///|
-fn css_named_color_rgb(color : String) -> (Int, Int, Int)? {
+fn css_named_color_rgb(color : String) -> (Int32, Int32, Int32)? {
   match color {
     "aliceblue" => Some((240, 248, 255))
     "antiquewhite" => Some((250, 235, 215))
@@ -1414,7 +1415,7 @@ fn css_named_color_rgb(color : String) -> (Int, Int, Int)? {
 }
 
 ///|
-fn parse_css_rgb(color : String) -> (Int, Int, Int)? {
+fn parse_css_rgb(color : String) -> (Int32, Int32, Int32)? {
   let normalized = color.trim().to_lower().to_owned()
   if normalized == "transparent" {
     return Some((0, 0, 0))
@@ -1543,10 +1544,10 @@ fn round_double(x : Double) -> Double {
 const LABEL_PADDING : Double = 5.0
 
 ///|
-const D2_DEFAULT_ICON_SIZE : Int = 32
+const D2_DEFAULT_ICON_SIZE : Int32 = 32
 
 ///|
-const D2_MAX_ICON_SIZE : Int = 64
+const D2_MAX_ICON_SIZE : Int32 = 64
 
 ///|
 const D2_DEFAULT_ICON_POSITION : String = "INSIDE_MIDDLE_CENTER"
@@ -1616,12 +1617,12 @@ fn transform_label_text(text : String, text_transform : String) -> String {
 const ROOT_INNER_BORDER_OFFSET : Double = 5.0
 
 ///|
-fn floor_to_int(v : Double) -> Int {
+fn floor_to_int(v : Double) -> Int32 {
   @math.floor(v).to_int()
 }
 
 ///|
-fn ceil_to_int(v : Double) -> Int {
+fn ceil_to_int(v : Double) -> Int32 {
   ceil_double(v).to_int()
 }
 
@@ -1632,7 +1633,7 @@ fn d2_base_dimensions(
   max_x : Double,
   max_y : Double,
   padding : Double,
-) -> (Int, Int, Int, Int) {
+) -> (Int32, Int32, Int32, Int32) {
   let left = floor_to_int(min_x - padding)
   let top = floor_to_int(min_y - padding)
   let right = ceil_to_int(max_x + padding)
@@ -1642,13 +1643,13 @@ fn d2_base_dimensions(
 
 ///|
 fn d2_dimensions_with_legend(
-  left : Int,
-  top : Int,
-  width : Int,
-  height : Int,
+  left : Int32,
+  top : Int32,
+  width : Int32,
+  height : Int32,
   padding : Double,
   layout : @layout_svg.LegendLayout?,
-) -> (Int, Int, Int, Int) {
+) -> (Int32, Int32, Int32, Int32) {
   let adjusted_left = left
   let mut adjusted_top = top
   let mut adjusted_width = width
@@ -1743,10 +1744,10 @@ fn pattern_overlay_class(pattern : String) -> String {
 }
 
 ///|
-const APPENDIX_ICON_RADIUS : Int = 16
+const APPENDIX_ICON_RADIUS : Int32 = 16
 
 ///|
-const APPENDIX_ICON_DIAMETER : Int = 32
+const APPENDIX_ICON_DIAMETER : Int32 = 32
 
 ///|
 fn non_empty_string(value : String?) -> String? {
@@ -1843,7 +1844,7 @@ fn positioned_tooltip_size(
   obj : Shape,
   config : SvgConfig,
   theme : @themes.Theme,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   let font_size = match obj.style.font_size {
     Some(v) => v.as_int().unwrap_or(default_object_font_size(obj, config))
     None => default_object_font_size(obj, config)
@@ -1874,8 +1875,8 @@ fn d2_calculate_tooltip_position(
   shape_y : Double,
   shape_width : Double,
   shape_height : Double,
-  tooltip_width : Int,
-  tooltip_height : Int,
+  tooltip_width : Int32,
+  tooltip_height : Int32,
   position : String,
 ) -> (Double, Double) {
   let padding = 10.0
@@ -2257,10 +2258,10 @@ fn compute_root_canvas_metrics(
   config : SvgConfig,
   theme : @themes.Theme,
   use_css_theme_vars : Bool,
-  base_left : Int,
-  base_top : Int,
-  base_width : Int,
-  base_height : Int,
+  base_left : Int32,
+  base_top : Int32,
+  base_width : Int32,
+  base_height : Int32,
 ) -> RootCanvasMetrics {
   let fill = style_color(graph.root.style.fill, "N7", theme, use_css_theme_vars)
   let fill_pattern_class = match
@@ -2344,7 +2345,7 @@ fn add_root_background_rect(
   stroke_dash : Double,
   theme : @themes.Theme,
   use_css_theme_vars : Bool,
-  class_name? : String? = None,
+  class_name~ : String? = None,
 ) -> Unit {
   let _ = stroke_dash
   svg.add(
@@ -2612,7 +2613,7 @@ pub fn render_svg(
   let connection_repeat_indices = d2_connection_repeat_indices(
     graph.connections,
   )
-  let repeat_index_by_edge_index : Map[Int, Int] = Map([])
+  let repeat_index_by_edge_index : Map[Int32, Int32] = Map([])
   for i, edge in graph.connections {
     repeat_index_by_edge_index[edge.index] = connection_repeat_indices[i]
   }
@@ -2697,7 +2698,7 @@ pub fn render_svg(
 
 ///|
 /// Estimate text width based on font size and character count
-fn estimate_text_width(text : String, font_size : Int) -> Double {
+fn estimate_text_width(text : String, font_size : Int32) -> Double {
   // Average character width is approximately 0.6 * font_size for proportional fonts
   text.length().to_double() * font_size.to_double() * 0.6
 }
@@ -2707,10 +2708,10 @@ fn estimate_text_width(text : String, font_size : Int) -> Double {
 fn edge_label_mask_def(
   mask_id : String,
   graph : Diagram,
-  mask_x : Int,
-  mask_y : Int,
-  mask_width : Int,
-  mask_height : Int,
+  mask_x : Int32,
+  mask_y : Int32,
+  mask_width : Int32,
+  mask_height : Int32,
   config : SvgConfig,
 ) -> String {
   let sb = StringBuilder::new()
@@ -3876,7 +3877,7 @@ fn compute_graph_bounds(
 
 ///|
 /// Get the depth of an object ID (number of dots + 1)
-fn get_object_depth(id : String) -> Int {
+fn get_object_depth(id : String) -> Int32 {
   @graph.syntax_path_depth(id)
 }
 
@@ -3894,11 +3895,11 @@ priv enum RenderObject {
 ///|
 priv struct RenderObjectItem {
   obj : RenderObject
-  original_index : Int
+  original_index : Int32
 }
 
 ///|
-fn render_object_z_index(obj : RenderObject) -> Int {
+fn render_object_z_index(obj : RenderObject) -> Int32 {
   match obj {
     ShapeObj(shape) => shape.z_index
     EdgeObj(edge) => edge.z_index
@@ -3906,7 +3907,7 @@ fn render_object_z_index(obj : RenderObject) -> Int {
 }
 
 ///|
-fn d2_shape_export_order(shapes : Array[Shape]) -> Map[String, Int] {
+fn d2_shape_export_order(shapes : Array[Shape]) -> Map[String, Int32] {
   let shape_by_id : Map[String, Shape] = Map([])
   let child_ids : Map[String, Bool] = Map([])
   for shape in shapes {
@@ -3921,7 +3922,7 @@ fn d2_shape_export_order(shapes : Array[Shape]) -> Map[String, Int] {
       queue.push(shape.id)
     }
   }
-  let order : Map[String, Int] = Map([])
+  let order : Map[String, Int32] = Map([])
   let mut cursor = 0
   let mut next_order = 0
   while cursor < queue.length() {
@@ -3955,7 +3956,7 @@ fn d2_shape_export_order(shapes : Array[Shape]) -> Map[String, Int] {
 fn sort_render_objects(
   shapes : Array[Shape],
   connections : Array[Connection],
-  preserve_shape_order? : Bool = false,
+  preserve_shape_order~ : Bool = false,
 ) -> Array[RenderObject] {
   // reference behavior: sort over the combined shape+connection stream:
   // 1) z-index asc
@@ -3979,7 +3980,10 @@ fn sort_render_objects(
     })
   }
   for i, connection in connections {
-    items.push({ obj: EdgeObj(connection), original_index: shapes.length() + i })
+    items.push({
+      obj: EdgeObj(connection),
+      original_index: shapes.length() + i,
+    })
   }
   items.sort_by(fn(a, b) {
     let z_a = render_object_z_index(a.obj)
@@ -4326,7 +4330,7 @@ fn render_svg_object(
   theme : @themes.Theme,
   use_css_theme_vars : Bool,
   layout_engine : String,
-  pass? : RenderPass = Foreground,
+  pass~ : RenderPass = Foreground,
 ) -> Unit raise @render_api.RenderError {
   guard obj.box is Some(box) else { return }
   // Skip inline-rendered children of sql_table/class.
@@ -5532,10 +5536,10 @@ const SQL_TABLE_TYPE_PADDING : Double = 20.0
 const SQL_TABLE_HEADER_PADDING : Double = 10.0
 
 ///|
-const SQL_TABLE_FONT_SIZE_L : Int = 20
+const SQL_TABLE_FONT_SIZE_L : Int32 = 20
 
 ///|
-const SQL_TABLE_HEADER_FONT_ADD : Int = 4
+const SQL_TABLE_HEADER_FONT_ADD : Int32 = 4
 
 ///|
 const SQL_CONSTRAINT_PREFIX : String = "sql_constraint:"
@@ -5582,7 +5586,7 @@ fn render_svg_sql_table(
   fill : String,
   stroke : String,
   stroke_width : Double,
-  pass? : RenderPass = Foreground,
+  pass~ : RenderPass = Foreground,
   _config : SvgConfig,
   theme : @themes.Theme,
   use_css_theme_vars : Bool,
@@ -5792,7 +5796,7 @@ const CLASS_PREFIX_WIDTH : Double = 20.0
 const CLASS_TYPE_PADDING : Double = 20.0
 
 ///|
-const CLASS_HEADER_FONT_ADD : Int = 4
+const CLASS_HEADER_FONT_ADD : Int32 = 4
 
 ///|
 priv struct ClassMember {
@@ -5855,7 +5859,7 @@ fn class_member_from_shape(child : Shape) -> ClassMember {
     raw_type
   }
   let underline = style_bool(child.style.underline, false)
-  { visibility, name, type_name, is_method, underline }
+  { visibility, name, type_name, is_method, underline, }
 }
 
 ///|
@@ -5871,7 +5875,7 @@ fn render_svg_class(
   config : SvgConfig,
   theme : @themes.Theme,
   use_css_theme_vars : Bool,
-  pass? : RenderPass = Foreground,
+  pass~ : RenderPass = Foreground,
 ) -> Unit {
   let members : Array[ClassMember] = []
   for child in children {
@@ -6134,8 +6138,8 @@ fn render_svg_code(
   stroke_width : Double,
   _config : SvgConfig,
   theme : @themes.Theme,
-  font_size : Int,
-  pass? : RenderPass = Foreground,
+  font_size : Int32,
+  pass~ : RenderPass = Foreground,
 ) -> Unit {
   // reference behavior: render both light and dark code groups and switch visibility via CSS.
   let code_bgs = [("light-code", "#ffffff"), ("dark-code", "#1e1e2e")]
@@ -6240,6 +6244,7 @@ priv enum CodeTokenKind {
 }
 
 ///|
+#derive(Eq)
 priv enum CodeLanguage {
   Unknown
   Go
@@ -6265,7 +6270,7 @@ priv enum CodeLanguage {
   Css
   Markdown
   MoonBit
-} derive(Eq)
+}
 
 ///|
 priv struct CodeToken {
@@ -6275,7 +6280,7 @@ priv struct CodeToken {
 
 ///|
 fn CodeToken::new(text : String, kind : CodeTokenKind) -> CodeToken {
-  { text, kind }
+  { text, kind, }
 }
 
 ///|
@@ -6708,7 +6713,7 @@ fn code_tokenize_css_line(line : String) -> Array[CodeToken] {
 fn code_push_css_text_tail(
   out : Array[CodeToken],
   line : String,
-  start : Int,
+  start : Int32,
 ) -> Unit {
   let mut i = start
   while i < line.length() {
@@ -7526,9 +7531,9 @@ fn code_is_call_control_word(word : String, language : CodeLanguage) -> Bool {
 ///|
 fn code_line_comment_prefix_len(
   line : String,
-  index : Int,
+  index : Int32,
   language : CodeLanguage,
-) -> Int? {
+) -> Int32? {
   match language {
     Go
     | JavaScript
@@ -7561,9 +7566,9 @@ fn code_line_comment_prefix_len(
 ///|
 fn code_block_comment_bounds(
   line : String,
-  index : Int,
+  index : Int32,
   language : CodeLanguage,
-) -> Int? {
+) -> Int32? {
   let supports = match language {
     Go
     | JavaScript
@@ -7592,9 +7597,9 @@ fn code_block_comment_bounds(
 ///|
 fn code_string_bounds(
   line : String,
-  index : Int,
+  index : Int32,
   language : CodeLanguage,
-) -> (Int, Bool)? {
+) -> (Int32, Bool)? {
   if index >= line.length() {
     return None
   }
@@ -7626,10 +7631,10 @@ fn code_string_bounds(
 ///|
 fn code_parse_quoted_string(
   line : String,
-  index : Int,
+  index : Int32,
   language : CodeLanguage,
   quote_char : Char,
-) -> (Int, Bool)? {
+) -> (Int32, Bool)? {
   let mut i = index + 1
   let mut has_escape = false
   while i < line.length() {
@@ -7666,7 +7671,7 @@ fn code_language_supports_backtick(language : CodeLanguage) -> Bool {
 }
 
 ///|
-fn code_is_number_start(line : String, index : Int) -> Bool {
+fn code_is_number_start(line : String, index : Int32) -> Bool {
   if index >= line.length() {
     return false
   }
@@ -7687,7 +7692,7 @@ fn code_is_number_start(line : String, index : Int) -> Bool {
 }
 
 ///|
-fn code_number_end(line : String, start : Int) -> Int {
+fn code_number_end(line : String, start : Int32) -> Int32 {
   let mut i = start
   let mut seen_dot = false
   let mut seen_exp = false
@@ -7742,7 +7747,7 @@ fn code_is_operator_char(c : Char) -> Bool {
 }
 
 ///|
-fn code_operator_end(line : String, start : Int) -> Int {
+fn code_operator_end(line : String, start : Int32) -> Int32 {
   code_consume_while(line, start, code_is_operator_char)
 }
 
@@ -7765,9 +7770,9 @@ fn code_is_bracket_char(c : Char) -> Bool {
 ///|
 fn code_consume_while(
   s : String,
-  start : Int,
+  start : Int32,
   predicate : (Char) -> Bool,
-) -> Int {
+) -> Int32 {
   let mut i = start
   while i < s.length() {
     match char_at(s, i) {
@@ -7779,7 +7784,7 @@ fn code_consume_while(
 }
 
 ///|
-fn code_consume_until_char(s : String, start : Int, ch : Char) -> Int {
+fn code_consume_until_char(s : String, start : Int32, ch : Char) -> Int32 {
   let mut i = start
   while i < s.length() {
     if char_at(s, i) == Some(ch) {
@@ -7791,7 +7796,7 @@ fn code_consume_until_char(s : String, start : Int, ch : Char) -> Int {
 }
 
 ///|
-fn code_starts_with_at(s : String, index : Int, prefix : String) -> Bool {
+fn code_starts_with_at(s : String, index : Int32, prefix : String) -> Bool {
   if index < 0 || index + prefix.length() > s.length() {
     return false
   }
@@ -7799,7 +7804,11 @@ fn code_starts_with_at(s : String, index : Int, prefix : String) -> Bool {
 }
 
 ///|
-fn code_find_substring_from(s : String, needle : String, start : Int) -> Int? {
+fn code_find_substring_from(
+  s : String,
+  needle : String,
+  start : Int32,
+) -> Int32? {
   if needle.length() == 0 || start >= s.length() {
     return None
   }
@@ -7919,7 +7928,7 @@ fn code_is_ident_continue(c : Char) -> Bool {
 }
 
 ///|
-fn code_next_non_space_char(s : String, start : Int) -> Char? {
+fn code_next_non_space_char(s : String, start : Int32) -> Char? {
   let mut i = start
   while i < s.length() {
     match char_at(s, i) {
@@ -7932,7 +7941,7 @@ fn code_next_non_space_char(s : String, start : Int) -> Char? {
 }
 
 ///|
-fn code_prev_non_space_char(s : String, start : Int) -> Char? {
+fn code_prev_non_space_char(s : String, start : Int32) -> Char? {
   let mut i = start
   while i >= 0 {
     match char_at(s, i) {
@@ -7962,7 +7971,7 @@ fn code_svg_escape(s : String) -> String {
 }
 
 ///|
-fn code_slice(s : String, start : Int, end_exclusive : Int) -> String {
+fn code_slice(s : String, start : Int32, end_exclusive : Int32) -> String {
   let sb = StringBuilder::new()
   for i in start..<end_exclusive {
     match s[i].to_char() {
@@ -8002,7 +8011,7 @@ fn d2_shape_path(
   inline_theme : Bool,
   fill_class_token : String?,
   stroke_class_token : String?,
-  stroke_dash? : Double = 0.0,
+  stroke_dash~ : Double = 0.0,
 ) -> String {
   let classes = StringBuilder::new()
   let stroke_token = match stroke_class_token {
@@ -8065,7 +8074,7 @@ fn render_svg_cylinder(
   use_css_theme_vars : Bool,
   fill_class_token : String?,
   stroke_class_token : String?,
-  stroke_dash? : Double = 0.0,
+  stroke_dash~ : Double = 0.0,
 ) -> Unit {
   let arc_depth = 24.0
   let arc_height = if box.height < arc_depth * 2.0 {
@@ -9469,7 +9478,7 @@ fn route_length(points : Array[Point]) -> Double {
 fn point_at_distance_on_route(
   points : Array[Point],
   distance : Double,
-) -> (Point, Int) {
+) -> (Point, Int32) {
   if points.length() < 2 {
     return (Point::new(0.0, 0.0), 0)
   }
@@ -9537,7 +9546,7 @@ fn unlocked_top_label_top_left(
   label_percentage : Double,
   width : Double,
   height : Double,
-) -> (Point, Int) {
+) -> (Point, Int32) {
   let total = route_length(route)
   let target_distance = label_percentage * total
   let (base_point, segment_index) = point_at_distance_on_route(
@@ -9823,7 +9832,7 @@ fn render_edge_arrowhead_label(
 fn render_svg_edge(
   svg : @svg.Svg,
   edge : Connection,
-  repeat_index : Int,
+  repeat_index : Int32,
   shapes : Array[Shape],
   sketch_session : SketchSession?,
   edge_label_mask_url : String,

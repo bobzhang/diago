@@ -23,27 +23,29 @@
 /// - Comments and CDATA sections
 
 ///|
+#derive(Eq, Debug)
 pub enum XmlNode {
   NodeElement(XmlElement)
   NodeText(String)
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub struct XmlElement {
   name : String
   attrs : Map[String, String]
   children : Array[XmlNode]
-} derive(Eq, Debug)
+}
 
 ///|
 priv struct Parser {
   s : String
-  mut pos : Int
+  mut pos : Int32
 }
 
 ///|
 fn Parser::new(s : String) -> Parser {
-  { s, pos: 0 }
+  { s, pos: 0, }
 }
 
 ///|
@@ -95,7 +97,7 @@ fn is_name_char(c : Char) -> Bool {
 }
 
 ///|
-fn substring_range(s : String, start : Int, end_ : Int) -> String {
+fn substring_range(s : String, start : Int32, end_ : Int32) -> String {
   if start >= end_ {
     return ""
   }
@@ -336,7 +338,7 @@ fn Parser::parse_element(self : Parser) -> XmlElement? {
   }
   self.skip_ws()
   if self.consume("/>") {
-    return Some({ name, attrs, children })
+    return Some({ name, attrs, children, })
   }
   if !self.consume(">") {
     return None
@@ -357,7 +359,7 @@ fn Parser::parse_element(self : Parser) -> XmlElement? {
       None => break
     }
   }
-  Some({ name, attrs, children })
+  Some({ name, attrs, children, })
 }
 
 ///|

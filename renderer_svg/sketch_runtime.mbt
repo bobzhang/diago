@@ -5,7 +5,7 @@ priv struct SketchSession {
 
 ///|
 fn SketchSession::new() -> SketchSession raise @render_api.RenderError {
-  let session = { disabled: () }
+  let session = { disabled: (), }
   ignore(session.disabled)
   raise UnsupportedFormat("sketch rendering is not supported")
 }

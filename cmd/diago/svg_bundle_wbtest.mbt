@@ -266,7 +266,7 @@ fn reset_bundle_test_state() -> Unit {
 }
 
 ///|
-fn count_occurrences(s : String, needle : String) -> Int {
+fn count_occurrences(s : String, needle : String) -> Int32 {
   if needle == "" {
     return 0
   }

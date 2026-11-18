@@ -3,11 +3,11 @@ fn test_object(
   id : String,
   label : String,
   shape_type : @graph.ShapeType,
-  child_ids? : Array[String] = [],
-  tooltip? : String? = None,
-  link? : String? = None,
-  language? : String? = None,
-  sql_constraints? : Array[String] = [],
+  child_ids~ : Array[String] = [],
+  tooltip~ : String? = None,
+  link~ : String? = None,
+  language~ : String? = None,
+  sql_constraints~ : Array[String] = [],
 ) -> @graph.ObjectInput {
   @graph.ObjectInput::from_parts(
     id,
@@ -40,16 +40,16 @@ fn test_object(
 
 ///|
 fn test_edge(
-  index : Int,
+  index : Int32,
   src_id : String,
   dst_id : String,
   label : String,
-  src_label? : String? = None,
-  dst_label? : String? = None,
-  icon? : String? = None,
-  icon_position? : String? = None,
-  icon_border_radius? : Double? = None,
-  link? : String? = None,
+  src_label~ : String? = None,
+  dst_label~ : String? = None,
+  icon~ : String? = None,
+  icon_position~ : String? = None,
+  icon_border_radius~ : Double? = None,
+  link~ : String? = None,
 ) -> @graph.EdgeInput {
   @graph.EdgeInput::from_parts(
     index,
@@ -85,12 +85,12 @@ fn test_edge(
 ///|
 fn test_graph_input(
   name : String,
-  objects? : Array[@graph.ObjectInput] = [],
-  edges? : Array[@graph.EdgeInput] = [],
-  layers? : Array[@graph.LayerInput] = [],
-  scenarios? : Array[@graph.ScenarioInput] = [],
-  steps? : Array[@graph.StepInput] = [],
-  legend? : @graph.LegendInput? = None,
+  objects~ : Array[@graph.ObjectInput] = [],
+  edges~ : Array[@graph.EdgeInput] = [],
+  layers~ : Array[@graph.LayerInput] = [],
+  scenarios~ : Array[@graph.ScenarioInput] = [],
+  steps~ : Array[@graph.StepInput] = [],
+  legend~ : @graph.LegendInput? = None,
 ) -> @graph.GraphInput {
   @graph.GraphInput::from_parts(
     name,
@@ -111,13 +111,13 @@ fn test_graph_input(
 ///|
 fn test_diagram(
   name : String,
-  objects? : Array[@graph.ObjectInput] = [],
-  edges? : Array[@graph.EdgeInput] = [],
-  layers? : Array[@graph.LayerInput] = [],
-  scenarios? : Array[@graph.ScenarioInput] = [],
-  steps? : Array[@graph.StepInput] = [],
-  legend? : @graph.LegendInput? = None,
-  config? : Config? = None,
+  objects~ : Array[@graph.ObjectInput] = [],
+  edges~ : Array[@graph.EdgeInput] = [],
+  layers~ : Array[@graph.LayerInput] = [],
+  scenarios~ : Array[@graph.ScenarioInput] = [],
+  steps~ : Array[@graph.StepInput] = [],
+  legend~ : @graph.LegendInput? = None,
+  config~ : Config? = None,
 ) -> Diagram {
   from_graph(
     test_graph_input(
@@ -134,7 +134,7 @@ fn test_diagram(
 }
 
 ///|
-fn test_config(theme_id : Int) -> Config {
+fn test_config(theme_id : Int32) -> Config {
   Config::from_parts(
     None,
     Some(theme_id),

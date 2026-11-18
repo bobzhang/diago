@@ -16,13 +16,14 @@
 /// Engine API regression tests
 
 ///|
+#derive(Debug)
 struct FakeEngine {
   _marker : Unit
-} derive(Debug)
+}
 
 ///|
 fn FakeEngine::new() -> FakeEngine {
-  { _marker: () }
+  { _marker: (), }
 }
 
 ///|
@@ -62,7 +63,7 @@ struct InvalidPatchEngine {
 
 ///|
 fn InvalidPatchEngine::new() -> InvalidPatchEngine {
-  { _marker: () }
+  { _marker: (), }
 }
 
 ///|
@@ -186,7 +187,7 @@ fn compile_graph_input(source : String) -> Result[@graph.GraphInput, String] {
 }
 
 ///|
-fn edge_input(index : Int, curved : Bool?) -> @graph.EdgeInput {
+fn edge_input(index : Int32, curved : Bool?) -> @graph.EdgeInput {
   let style = @graph.StyleInput::from_parts(
     None,
     None,
@@ -270,13 +271,14 @@ test "layout engine patches cannot introduce unknown identities" {
 }
 
 ///|
+#derive(Debug)
 struct RoundtripEngine {
   _marker : Unit
-} derive(Debug)
+}
 
 ///|
 fn RoundtripEngine::new() -> RoundtripEngine {
-  { _marker: () }
+  { _marker: (), }
 }
 
 ///|

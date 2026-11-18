@@ -1288,7 +1288,7 @@ test "sql endpoint normalization keeps quoted-dot objects distinct" {
 }
 
 ///|
-fn test_range(offset : Int) -> @lexer.Range {
+fn test_range(offset : Int32) -> @lexer.Range {
   let start = @lexer.Position::new(0, offset, offset)
   let end = @lexer.Position::new(0, offset + 1, offset + 1)
   @lexer.Range::new(start, end)

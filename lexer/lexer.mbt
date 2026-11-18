@@ -17,19 +17,20 @@
 struct Lexer {
   path : String
   chars : Array[Char] // pre-converted characters for easy indexing
-  mut pos : Int // current character position
-  mut line : Int // current line (0-based)
-  mut column : Int // current column (0-based)
+  mut pos : Int32 // current character position
+  mut line : Int32 // current line (0-based)
+  mut column : Int32 // current column (0-based)
   tokens : Array[Token]
   errors : Array[LexError]
 }
 
 ///|
 /// Lexer error
+#derive(Eq, Debug)
 pub struct LexError {
   message : String
   range : Range
-} derive(Eq, Debug)
+}
 
 ///|
 /// Create a new lexer for the given source (in-memory, no path)
@@ -40,7 +41,7 @@ pub fn Lexer::new(source : String) -> Lexer {
 ///|
 pub fn Lexer::with_path(path : String, source : String) -> Lexer {
   let chars = source.to_array()
-  { path, chars, pos: 0, line: 0, column: 0, tokens: [], errors: [] }
+  { path, chars, pos: 0, line: 0, column: 0, tokens: [], errors: [], }
 }
 
 ///|
@@ -86,7 +87,7 @@ fn Lexer::peek_next(self : Lexer) -> Char {
 }
 
 ///|
-fn Lexer::peek_offset(self : Lexer, n : Int) -> Char {
+fn Lexer::peek_offset(self : Lexer, n : Int32) -> Char {
   if self.pos + n >= self.chars.length() {
     '\u{0}'
   } else {
@@ -108,7 +109,7 @@ fn Lexer::advance(self : Lexer) -> Char {
 }
 
 ///|
-fn Lexer::slice_source(self : Lexer, start : Int, end : Int) -> String {
+fn Lexer::slice_source(self : Lexer, start : Int32, end : Int32) -> String {
   let buf = StringBuilder::new()
   for i = start; i < end; i = i + 1 {
     if i < self.chars.length() {
@@ -130,7 +131,7 @@ fn Lexer::add_token(self : Lexer, kind : TokenKind, start : Position) -> Unit {
 ///|
 fn Lexer::add_error(self : Lexer, message : String, start : Position) -> Unit {
   let end = self.current_position()
-  self.errors.push({ message, range: Range::with_path(self.path, start, end) })
+  self.errors.push({ message, range: Range::with_path(self.path, start, end), })
 }
 
 ///|
@@ -586,7 +587,11 @@ fn trim_comment_common_indent(s : String) -> String {
 }
 
 ///|
-fn substring_comment_by_offsets(s : String, start : Int, end : Int) -> String {
+fn substring_comment_by_offsets(
+  s : String,
+  start : Int32,
+  end : Int32,
+) -> String {
   let chars = s.to_array()
   let buf = StringBuilder::new()
   let mut i = start

@@ -152,7 +152,7 @@ async fn compile_render_source(
         salt=request.salt,
         omit_version=request.omit_version,
       ) {
-      Ok(output) => { output, warning: None }
+      Ok(output) => { output, warning: None, }
       Err(err) => return Err(err)
     }
   }

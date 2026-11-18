@@ -27,17 +27,19 @@ using @graph {
 }
 
 ///|
+#derive(Debug)
 pub struct LegendLayoutConfig {
-  font_size : Int
+  font_size : Int32
   margin : Double
-} derive(Debug)
-
-///|
-pub fn LegendLayoutConfig::new(font_size : Int) -> LegendLayoutConfig {
-  { font_size, margin: 20.0 }
 }
 
 ///|
+pub fn LegendLayoutConfig::new(font_size : Int32) -> LegendLayoutConfig {
+  { font_size, margin: 20.0, }
+}
+
+///|
+#derive(Debug)
 pub struct LegendLayout {
   x : Double
   y : Double
@@ -47,20 +49,22 @@ pub struct LegendLayout {
   stroke : String
   title : TitleLayout?
   entries : Array[LegendEntryLayout]
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 pub struct TitleLayout {
   x : Double
   y : Double
   text : String
-} derive(Debug)
+}
 
 ///|
 /// Pre-positioned legend entry layout.
 ///
 /// The renderer should not compute positions (label alignment, icon placement,
 /// separators). It only renders based on this layout.
+#derive(Debug)
 pub enum LegendEntryLayout {
   Shape(
     id~ : String,
@@ -69,12 +73,12 @@ pub enum LegendEntryLayout {
     label~ : String,
     style~ : StyleInput?,
     label_x~ : Double,
-    label_y~ : Double
+    label_y~ : Double,
   )
   Connection(
     src_id~ : String,
     dst_id~ : String,
-    index~ : Int,
+    index~ : Int32,
     line_start_x~ : Double,
     line_end_x~ : Double,
     line_y~ : Double,
@@ -85,7 +89,7 @@ pub enum LegendEntryLayout {
     label~ : String,
     style~ : StyleInput?,
     label_x~ : Double,
-    label_y~ : Double
+    label_y~ : Double,
   )
   Custom(
     icon_x~ : Double,
@@ -94,10 +98,10 @@ pub enum LegendEntryLayout {
     icon~ : String,
     label~ : String,
     label_x~ : Double,
-    label_y~ : Double
+    label_y~ : Double,
   )
   Separator(x1~ : Double, x2~ : Double, y~ : Double)
-} derive(Debug)
+}
 
 ///|
 fn legend_text_dimensions(text : String) -> @text_metrics.TextDimensions {
@@ -105,7 +109,7 @@ fn legend_text_dimensions(text : String) -> @text_metrics.TextDimensions {
 }
 
 ///|
-fn calculate_size(legend : LegendInput) -> (Double, Double, Int, Int) {
+fn calculate_size(legend : LegendInput) -> (Double, Double, Int32, Int32) {
   if legend.is_empty() {
     return (0.0, 0.0, 0, 0)
   }
@@ -169,7 +173,7 @@ fn calculate_size(legend : LegendInput) -> (Double, Double, Int, Int) {
 }
 
 ///|
-fn max_int(a : Int, b : Int) -> Int {
+fn max_int(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -197,7 +201,7 @@ pub fn compute_legend_layout(
   let fill = "#ffffff"
   let stroke = "#DEE1EB"
   let title_text = legend.title.unwrap_or("Legend")
-  let title = Some({ x: x + 20.0, y: y + 34.0, text: title_text })
+  let title = Some({ x: x + 20.0, y: y + 34.0, text: title_text, })
   let mut current_y = y + 54.0
   let entries : Array[LegendEntryLayout] = []
   let mut emitted_separator = false
@@ -227,7 +231,7 @@ pub fn compute_legend_layout(
         src_arrow~,
         dst_arrow~,
         label~,
-        style~
+        style~,
       ) => {
         if label == "" {
           continue
@@ -291,5 +295,5 @@ pub fn compute_legend_layout(
       Separator => ()
     }
   }
-  Some({ x, y, width, height, fill, stroke, title, entries })
+  Some({ x, y, width, height, fill, stroke, title, entries, })
 }

@@ -19,53 +19,56 @@
 /// The patch can then be applied to the graph to produce a new graph.
 
 ///|
+#derive(Debug)
 pub struct FragmentOperandLayout {
   condition : String?
   separator_y : Double
-} derive(Debug)
+}
 
 ///|
 pub fn FragmentOperandLayout::new(
   condition : String?,
   separator_y : Double,
 ) -> FragmentOperandLayout {
-  { condition, separator_y }
+  { condition, separator_y, }
 }
 
 ///|
+#derive(Debug)
 pub struct SequenceFragmentLayout {
   fragment_type : String
   condition : String?
   bbox : Box?
-  start_index : Int
-  end_index : Int
+  start_index : Int32
+  end_index : Int32
   operands : Array[FragmentOperandLayout]
-} derive(Debug)
+}
 
 ///|
 pub fn SequenceFragmentLayout::new(
   fragment_type : String,
   condition : String?,
   bbox : Box?,
-  start_index : Int,
-  end_index : Int,
+  start_index : Int32,
+  end_index : Int32,
   operands : Array[FragmentOperandLayout],
 ) -> SequenceFragmentLayout {
-  { fragment_type, condition, bbox, start_index, end_index, operands }
+  { fragment_type, condition, bbox, start_index, end_index, operands, }
 }
 
 ///|
+#derive(Debug)
 pub struct LayoutPatch {
   nodes : Map[String, Box]
   node_labels : Map[String, Box]
-  edges : Map[Int, Array[Point]]
-  edge_bend_points : Map[Int, Array[Point]]
-  edge_curves : Map[Int, Bool]
-  edge_labels : Map[Int, Box]
+  edges : Map[Int32, Array[Point]]
+  edge_bend_points : Map[Int32, Array[Point]]
+  edge_curves : Map[Int32, Bool]
+  edge_labels : Map[Int32, Box]
   activation_boxes : Array[(String, Box)]
   sequence_notes : Array[(String, String, Box)]
   sequence_fragments : Array[SequenceFragmentLayout]
-} derive(Debug)
+}
 
 ///|
 pub fn LayoutPatch::new() -> LayoutPatch {

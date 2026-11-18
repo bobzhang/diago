@@ -16,20 +16,22 @@
 /// LSP-facing helper APIs for editor integrations.
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CompletionKind {
   Keyword
   Style
   Shape
   Value
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Eq, Debug)
 pub struct CompletionItem {
   label : String
   kind : CompletionKind
   detail : String
   insert_text : String
-} derive(Eq, Debug)
+}
 
 ///|
 priv enum RefSelector {
@@ -58,8 +60,8 @@ priv enum CompletionContext {
 pub fn get_ref_ranges(
   source : String,
   key : String,
-  board_path? : Array[String] = [],
-  options? : ParseOptions = ParseOptions::new(),
+  board_path~ : Array[String] = [],
+  options~ : ParseOptions = ParseOptions::new(),
 ) -> Array[@lexer.Range] raise DiagoError {
   let ir_map = parse(source, options~)
   let board_root = match find_map_by_path(ir_map, board_path) {
@@ -93,8 +95,8 @@ pub fn get_ref_ranges(
 ///|
 pub fn get_board_path_at_position(
   source : String,
-  line : Int,
-  column : Int,
+  line : Int32,
+  column : Int32,
 ) -> Array[String] {
   let (ast_map, _errors) = @compiler.parse(source)
   match board_path_at_map(ast_map, [], line, column) {
@@ -106,8 +108,8 @@ pub fn get_board_path_at_position(
 ///|
 pub fn get_completion_items(
   source : String,
-  line : Int,
-  column : Int,
+  line : Int32,
+  column : Int32,
 ) -> Array[CompletionItem] {
   let prefix = line_prefix_at(source, line, column)
   match detect_completion_context(prefix) {
@@ -235,8 +237,8 @@ fn find_field_by_path(root : @ir.Map, path : Array[String]) -> @ir.Field? {
 fn board_path_at_map(
   map : @ast.Map,
   current_path : Array[String],
-  line : Int,
-  column : Int,
+  line : Int32,
+  column : Int32,
 ) -> Array[String]? {
   if !position_in_range(map.range, line, column) {
     return None
@@ -296,7 +298,11 @@ fn is_board_keyword(segment : String) -> Bool {
 }
 
 ///|
-fn position_in_range(range : @lexer.Range, line : Int, column : Int) -> Bool {
+fn position_in_range(
+  range : @lexer.Range,
+  line : Int32,
+  column : Int32,
+) -> Bool {
   let after_start = line > range.start.line ||
     (line == range.start.line && column >= range.start.column)
   let before_end = line < range.end.line ||
@@ -305,7 +311,7 @@ fn position_in_range(range : @lexer.Range, line : Int, column : Int) -> Bool {
 }
 
 ///|
-fn line_prefix_at(source : String, line : Int, column : Int) -> String {
+fn line_prefix_at(source : String, line : Int32, column : Int32) -> String {
   if line < 0 || column <= 0 {
     return ""
   }
@@ -437,8 +443,8 @@ fn shape_completion_items() -> Array[CompletionItem] {
 ///|
 fn boolean_completion_items() -> Array[CompletionItem] {
   [
-    { label: "true", kind: Value, detail: "boolean", insert_text: "true" },
-    { label: "false", kind: Value, detail: "boolean", insert_text: "false" },
+    { label: "true", kind: Value, detail: "boolean", insert_text: "true", },
+    { label: "false", kind: Value, detail: "boolean", insert_text: "false", },
   ]
 }
 
@@ -573,7 +579,7 @@ fn value_hint_completion_item(property : String) -> CompletionItem {
     "width" | "height" | "top" | "left" => "(pixels)"
     _ => "(value)"
   }
-  { label, kind: Value, detail: "value hint", insert_text: "" }
+  { label, kind: Value, detail: "value hint", insert_text: "", }
 }
 
 ///|
@@ -600,7 +606,7 @@ fn completion_items_from_values(
 }
 
 ///|
-fn slice_string(s : String, start : Int, end : Int) -> String {
+fn slice_string(s : String, start : Int32, end : Int32) -> String {
   let from = if start < 0 { 0 } else { start }
   let to = if end < from {
     from

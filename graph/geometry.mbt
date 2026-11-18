@@ -14,19 +14,21 @@
 
 ///|
 /// Bounding box for positioning
+#derive(Eq, Debug)
 pub struct Box {
   x : Double
   y : Double
   width : Double
   height : Double
-} derive(Eq, Debug)
+}
 
 ///|
 /// A 2D point
+#derive(Eq, Debug)
 pub struct Point {
   x : Double
   y : Double
-} derive(Eq, Debug)
+}
 
 ///|
 pub impl Show for Box with fn output(self, logger) {
@@ -52,22 +54,22 @@ pub impl Show for Point with fn output(self, logger) {
 
 ///|
 pub fn Box::new(x : Double, y : Double, width : Double, height : Double) -> Box {
-  { x, y, width, height }
+  { x, y, width, height, }
 }
 
 ///|
 pub fn Box::zero() -> Box {
-  { x: 0.0, y: 0.0, width: 0.0, height: 0.0 }
+  { x: 0.0, y: 0.0, width: 0.0, height: 0.0, }
 }
 
 ///|
 pub fn Point::new(x : Double, y : Double) -> Point {
-  { x, y }
+  { x, y, }
 }
 
 ///|
 pub fn Point::zero() -> Point {
-  { x: 0.0, y: 0.0 }
+  { x: 0.0, y: 0.0, }
 }
 
 ///|

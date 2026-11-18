@@ -22,6 +22,7 @@
 
 ///|
 /// Layout configuration
+#derive(Debug)
 pub struct LayoutConfig {
   /// Horizontal spacing between objects
   horizontal_spacing : Double
@@ -35,16 +36,17 @@ pub struct LayoutConfig {
   default_height : Double
   /// Edge padding from objects
   edge_padding : Double
-} derive(Debug)
+}
 
 ///|
 /// Layout direction
+#derive(Eq, Debug)
 pub(all) enum Direction {
   Down
   Right
   Up
   Left
-} derive(Eq, Debug)
+}
 
 ///|
 pub impl Show for Direction with fn output(self, logger) {
@@ -59,20 +61,22 @@ pub impl Show for Direction with fn output(self, logger) {
 
 ///|
 /// Layout engine capability flags aligned with the reference's layout feature model.
+#derive(Eq, Debug)
 pub(all) enum LayoutFeature {
   NearObject
   ContainerDimensions
   TopLeft
   DescendantEdges
-} derive(Eq, Debug)
+}
 
 ///|
 /// Layout error
+#derive(Eq, Debug)
 pub(all) suberror LayoutError {
   InvalidGraph(String)
   CycleDetected(String)
   Unsupported(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub impl Show for LayoutError with fn output(self, logger) {
@@ -129,7 +133,7 @@ pub fn LayoutConfig::with_spacing(
   vertical : Double,
 ) -> LayoutConfig {
   let config = LayoutConfig::new()
-  { ..config, horizontal_spacing: horizontal, vertical_spacing: vertical }
+  { ..config, horizontal_spacing: horizontal, vertical_spacing: vertical, }
 }
 
 ///|
@@ -439,7 +443,7 @@ fn find_sql_column_index(
   object_by_id : Map[String, @graph.ObjectInput],
   parent_id_by_child_id : Map[String, String],
   field_id : String,
-) -> Int? {
+) -> Int32? {
   let field = match object_by_id.get(field_id) {
     Some(f) => f
     None => return None
@@ -903,16 +907,16 @@ const D2_GRID_STARTING_THRESHOLD : Double = 1.2
 const D2_GRID_THRESHOLD_STEP_SIZE : Double = 0.25
 
 ///|
-const D2_GRID_MIN_THRESHOLD_ATTEMPTS : Int = 1
+const D2_GRID_MIN_THRESHOLD_ATTEMPTS : Int32 = 1
 
 ///|
-const D2_GRID_MAX_THRESHOLD_ATTEMPTS : Int = 3
+const D2_GRID_MAX_THRESHOLD_ATTEMPTS : Int32 = 3
 
 ///|
-const D2_GRID_ATTEMPT_LIMIT : Int = 100000
+const D2_GRID_ATTEMPT_LIMIT : Int32 = 100000
 
 ///|
-const D2_GRID_SKIP_LIMIT : Int = 10000000
+const D2_GRID_SKIP_LIMIT : Int32 = 10000000
 
 ///|
 priv struct GridSemanticContext {
@@ -934,7 +938,7 @@ fn prepare_layout_semantics(
 ) -> (@graph.GraphInput, GridSemanticContext) {
   let groups = collect_grid_semantic_groups(graph)
   if groups.is_empty() {
-    return (graph, { groups, child_ids: Map([]) })
+    return (graph, { groups, child_ids: Map([]), })
   }
   let pre_sized = apply_grid_semantic_parent_boxes(graph, groups, config)
   let child_ids : Map[String, Bool] = Map([])
@@ -943,7 +947,7 @@ fn prepare_layout_semantics(
       child_ids[id] = true
     }
   }
-  (detach_grid_children(pre_sized, groups), { groups, child_ids })
+  (detach_grid_children(pre_sized, groups), { groups, child_ids, })
 }
 
 ///|
@@ -1468,7 +1472,7 @@ fn grid_child_margin_like_d2(
     }
   }
 
-  { left, top, right, bottom }
+  { left, top, right, bottom, }
 }
 
 ///|
@@ -1659,7 +1663,7 @@ fn grid_semantic_padding_like_d2(
   if right < horizontal_padding {
     right = horizontal_padding
   }
-  { left, top, right, bottom }
+  { left, top, right, bottom, }
 }
 
 ///|
@@ -1743,7 +1747,7 @@ fn grid_container_spacing_padding_like_d2(
     }
   }
 
-  { left, top, right, bottom }
+  { left, top, right, bottom, }
 }
 
 ///|
@@ -1864,7 +1868,7 @@ fn root_grid_gaps(parent : @graph.ObjectInput) -> (Double, Double) {
 
 ///|
 fn root_grid_segment_size(
-  segment : Array[Int],
+  segment : Array[Int32],
   sizes : Array[Double],
   gap : Double,
 ) -> Double {
@@ -1880,7 +1884,7 @@ fn root_grid_segment_size(
 
 ///|
 fn root_grid_layout_distance(
-  layout : Array[Array[Int]],
+  layout : Array[Array[Int32]],
   target_size : Double,
   sizes : Array[Double],
   gap : Double,
@@ -1895,15 +1899,15 @@ fn root_grid_layout_distance(
 
 ///|
 fn root_grid_gen_layout(
-  count : Int,
-  cut_indices : Array[Int],
-) -> Array[Array[Int]] {
-  let layout : Array[Array[Int]] = []
+  count : Int32,
+  cut_indices : Array[Int32],
+) -> Array[Array[Int32]] {
+  let layout : Array[Array[Int32]] = []
   let mut obj_index = 0
   let mut i = 0
   while i <= cut_indices.length() {
     let stop = if i < cut_indices.length() { cut_indices[i] } else { count - 1 }
-    let row : Array[Int] = []
+    let row : Array[Int32] = []
     while obj_index <= stop && obj_index < count {
       row.push(obj_index)
       obj_index = obj_index + 1
@@ -1915,8 +1919,11 @@ fn root_grid_gen_layout(
 }
 
 ///|
-fn root_grid_cut_combinations(end : Int, cuts_left : Int) -> Array[Array[Int]] {
-  let out : Array[Array[Int]] = []
+fn root_grid_cut_combinations(
+  end : Int32,
+  cuts_left : Int32,
+) -> Array[Array[Int32]] {
+  let out : Array[Array[Int32]] = []
   if end < 2 || cuts_left <= 0 {
     return out
   }
@@ -1941,14 +1948,14 @@ fn root_grid_cut_combinations(end : Int, cuts_left : Int) -> Array[Array[Int]] {
 fn root_grid_fast_layout(
   sizes : Array[Double],
   target_size : Double,
-  n_cuts : Int,
+  n_cuts : Int32,
   gap : Double,
-) -> Array[Array[Int]]? {
+) -> Array[Array[Int32]]? {
   if n_cuts <= 0 {
     return Some(root_grid_gen_layout(sizes.length(), []))
   }
   let mut debt = 0.0
-  let division : Array[Int] = []
+  let division : Array[Int32] = []
   let mut row_size = 0.0
   for i, size in sizes {
     if row_size == 0.0 {
@@ -2014,13 +2021,13 @@ fn root_grid_stddev(values : Array[Double]) -> Double {
 fn root_grid_best_layout(
   sizes : Array[Double],
   target_size : Double,
-  n_cuts : Int,
+  n_cuts : Int32,
   gap : Double,
-) -> Array[Array[Int]] {
+) -> Array[Array[Int32]] {
   if n_cuts <= 0 {
     return root_grid_gen_layout(sizes.length(), [])
   }
-  let mut best_layout : Array[Array[Int]] = []
+  let mut best_layout : Array[Array[Int32]] = []
   let mut best_dist = 1000000000000.0
   let mut has_best = false
   let mut fast_is_best = false
@@ -2051,7 +2058,7 @@ fn root_grid_best_layout(
   let mut ok_threshold = D2_GRID_STARTING_THRESHOLD
   let mut attempt = 0
   while attempt < threshold_attempts || !has_best {
-    let starting_cache : Map[Int, Bool] = Map([])
+    let starting_cache : Map[Int32, Bool] = Map([])
     let mut count = 0
     let mut skip_count = 0
     for division in combinations {
@@ -2224,7 +2231,7 @@ pub fn estimate_root_grid_child_boxes(
       col_widths.push(0.0)
     }
 
-    let get_index = (row_index : Int, column_index : Int) => {
+    let get_index = (row_index : Int32, column_index : Int32) => {
       if row_directed {
         let index = row_index * columns + column_index
         if index < n {
@@ -2661,7 +2668,7 @@ fn restore_grid_semantics(
             layout_height: content_box.height,
             label_position: None,
             icon_position: None,
-            initial_margin: { left: 0.0, top: 0.0, right: 0.0, bottom: 0.0 },
+            initial_margin: { left: 0.0, top: 0.0, right: 0.0, bottom: 0.0, },
           }
       }
       let child = match laid_out_by_id.get(child_id) {
@@ -2906,7 +2913,7 @@ fn clone_object_with_parts_and_label(
 fn semantic_object_size(
   obj : @graph.ObjectInput,
   config : LayoutConfig,
-  inside_sequence? : Bool = false,
+  inside_sequence~ : Bool = false,
 ) -> (Double, Double) {
   if obj.label == "" &&
     obj.shape_type != Image &&
@@ -2978,7 +2985,7 @@ fn semantic_object_size(
 fn estimate_semantic_object_size(
   obj : @graph.ObjectInput,
   config : LayoutConfig,
-  inside_sequence? : Bool = false,
+  inside_sequence~ : Bool = false,
 ) -> (Double, Double) {
   let has_explicit_width = match obj.box {
     Some(box) => box.width > 0.0
@@ -3101,19 +3108,19 @@ fn estimate_semantic_object_size(
 }
 
 ///|
-const D2_FONT_SIZE_M : Int = 16
+const D2_FONT_SIZE_M : Int32 = 16
 
 ///|
-const D2_FONT_SIZE_L : Int = 20
+const D2_FONT_SIZE_L : Int32 = 20
 
 ///|
-const D2_FONT_SIZE_XL : Int = 24
+const D2_FONT_SIZE_XL : Int32 = 24
 
 ///|
-const D2_FONT_SIZE_XXL : Int = 28
+const D2_FONT_SIZE_XXL : Int32 = 28
 
 ///|
-fn container_level_label_size_like_d2(level : Int) -> Int {
+fn container_level_label_size_like_d2(level : Int32) -> Int32 {
   if level <= 1 {
     D2_FONT_SIZE_XXL
   } else if level == 2 {
@@ -3126,7 +3133,7 @@ fn container_level_label_size_like_d2(level : Int) -> Int {
 }
 
 ///|
-fn object_container_level_like_d2(obj : @graph.ObjectInput) -> Int {
+fn object_container_level_like_d2(obj : @graph.ObjectInput) -> Int32 {
   let depth = @graph.syntax_path_depth(obj.abs_id_syntax)
   if depth <= 0 {
     1
@@ -3139,7 +3146,7 @@ fn object_container_level_like_d2(obj : @graph.ObjectInput) -> Int {
 fn object_label_font_size_like_d2(
   obj : @graph.ObjectInput,
   inside_sequence : Bool,
-) -> Int {
+) -> Int32 {
   let mut font_size = D2_FONT_SIZE_M
   if obj.shape_type == Class || obj.shape_type == SqlTable {
     font_size = D2_FONT_SIZE_L
@@ -3502,38 +3509,38 @@ fn positive_or(value : Double, fallback : Double) -> Double {
 
 ///|
 priv struct GraphOrderContext {
-  object_order : Map[String, Int]
-  edge_order : Map[Int, Int]
-  child_order_by_parent : Map[String, Map[String, Int]]
+  object_order : Map[String, Int32]
+  edge_order : Map[Int32, Int32]
+  child_order_by_parent : Map[String, Map[String, Int32]]
 }
 
 ///|
 fn save_graph_order_like_d2(graph : @graph.GraphInput) -> GraphOrderContext {
-  let object_order : Map[String, Int] = Map([])
+  let object_order : Map[String, Int32] = Map([])
   for i, obj in graph.objects {
     object_order[obj.abs_id_syntax] = i
   }
 
-  let edge_order : Map[Int, Int] = Map([])
+  let edge_order : Map[Int32, Int32] = Map([])
   for i, edge in graph.edges {
     edge_order[edge.index] = i
   }
 
-  let child_order_by_parent : Map[String, Map[String, Int]] = Map([])
-  let root_child_order : Map[String, Int] = Map([])
+  let child_order_by_parent : Map[String, Map[String, Int32]] = Map([])
+  let root_child_order : Map[String, Int32] = Map([])
   for i, child_id in graph.root.child_ids {
     root_child_order[child_id] = i
   }
   child_order_by_parent[graph.root.abs_id_syntax] = root_child_order
   for obj in graph.objects {
-    let child_order : Map[String, Int] = Map([])
+    let child_order : Map[String, Int32] = Map([])
     for i, child_id in obj.child_ids {
       child_order[child_id] = i
     }
     child_order_by_parent[obj.abs_id_syntax] = child_order
   }
 
-  { object_order, edge_order, child_order_by_parent }
+  { object_order, edge_order, child_order_by_parent, }
 }
 
 ///|
@@ -3545,7 +3552,7 @@ fn restore_child_order_like_d2(
   match context.child_order_by_parent.get(parent_id) {
     Some(order) => {
       let out = child_ids.copy()
-      let current_order : Map[String, Int] = Map([])
+      let current_order : Map[String, Int32] = Map([])
       for i, child_id in out {
         current_order[child_id] = i
       }
@@ -3576,7 +3583,7 @@ fn restore_graph_order_like_d2(
   let context = save_graph_order_like_d2(graph)
 
   let objects = laid_out_graph.objects.copy()
-  let current_object_order : Map[String, Int] = Map([])
+  let current_object_order : Map[String, Int32] = Map([])
   for i, obj in objects {
     current_object_order[obj.abs_id_syntax] = i
   }
@@ -3609,7 +3616,7 @@ fn restore_graph_order_like_d2(
   }
 
   let edges = laid_out_graph.edges.copy()
-  let current_edge_order : Map[Int, Int] = Map([])
+  let current_edge_order : Map[Int32, Int32] = Map([])
   for i, edge in edges {
     current_edge_order[edge.index] = i
   }

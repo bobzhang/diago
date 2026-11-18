@@ -14,14 +14,15 @@
 
 ///|
 /// A graph or layout result violated the layout-core identity contract.
+#derive(Eq, Debug)
 pub(all) suberror LayoutProblemError {
   DuplicateObjectId(String)
-  DuplicateEdgeIndex(Int)
+  DuplicateEdgeIndex(Int32)
   MissingChild(parent_id~ : String, child_id~ : String)
-  MissingEdgeEndpoint(edge_index~ : Int, endpoint_id~ : String)
+  MissingEdgeEndpoint(edge_index~ : Int32, endpoint_id~ : String)
   UnknownPatchNode(String)
-  UnknownPatchEdge(Int)
-} derive(Eq, Debug)
+  UnknownPatchEdge(Int32)
+}
 
 ///|
 pub fn LayoutProblemError::message(self : LayoutProblemError) -> String {
@@ -48,7 +49,7 @@ pub fn LayoutProblemError::message(self : LayoutProblemError) -> String {
 pub struct LayoutProblem {
   priv graph : @graph.GraphInput
   priv object_ids : Map[String, Bool]
-  priv edge_indices : Map[Int, Bool]
+  priv edge_indices : Map[Int32, Bool]
 }
 
 ///|
@@ -62,7 +63,7 @@ pub fn compile(
     register_object_id(object_ids, obj.abs_id_syntax)
   }
   validate_children(graph, object_ids)
-  let edge_indices : Map[Int, Bool] = Map([])
+  let edge_indices : Map[Int32, Bool] = Map([])
   for edge in graph.edges {
     if edge_indices.contains(edge.index) {
       raise DuplicateEdgeIndex(edge.index)
@@ -77,7 +78,7 @@ pub fn compile(
       raise MissingEdgeEndpoint(edge_index=edge.index, endpoint_id=dst_id)
     }
   }
-  { graph: canonicalize_graph(graph), object_ids, edge_indices }
+  { graph: canonicalize_graph(graph), object_ids, edge_indices, }
 }
 
 ///|
@@ -144,8 +145,8 @@ fn validate_parent_children(
 
 ///|
 fn[V] validate_patch_edge_map(
-  edge_indices : Map[Int, Bool],
-  values : Map[Int, V],
+  edge_indices : Map[Int32, Bool],
+  values : Map[Int32, V],
 ) -> Unit raise LayoutProblemError {
   for index, _ in values {
     if !edge_indices.contains(index) {

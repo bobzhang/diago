@@ -14,7 +14,7 @@
 
 ///|
 priv struct WasmFailure {
-  error_kind : Int
+  error_kind : Int32
   message : String
 }
 
@@ -157,12 +157,12 @@ fn decode_render_request(json : Json) -> Result[WasmRenderRequest, WasmFailure] 
     .with_no_xml_tag(no_xml_tag)
     .with_salt(salt)
     .with_omit_version(omit_version)
-  Ok({ source, options })
+  Ok({ source, options, })
 }
 
 ///|
 fn[T] invalid_request(message : String) -> Result[T, WasmFailure] {
-  Err({ error_kind: error_invalid_request, message })
+  Err({ error_kind: error_invalid_request, message, })
 }
 
 ///|
@@ -213,7 +213,7 @@ fn required_string(
 fn required_int(
   fields : Map[String, Json],
   key : String,
-) -> Result[Int, String] {
+) -> Result[Int32, String] {
   match fields.get(key) {
     Some(Number(value, ..)) => {
       let integer = value.to_int()
@@ -257,7 +257,7 @@ fn optional_string(
 fn optional_int(
   fields : Map[String, Json],
   key : String,
-) -> Result[Int?, String] {
+) -> Result[Int32?, String] {
   match fields.get(key) {
     Some(Number(value, ..)) => {
       let integer = value.to_int()

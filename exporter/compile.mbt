@@ -19,6 +19,7 @@
 /// layout and rendering.
 
 ///|
+#derive(Debug)
 priv struct Style {
   mut opacity : Double?
   mut stroke : String?
@@ -30,7 +31,7 @@ priv struct Style {
   mut three_d : Bool?
   mut multiple : Bool?
   mut font : String?
-  mut font_size : Int?
+  mut font_size : Int32?
   mut font_color : String?
   mut bold : Bool?
   mut italic : Bool?
@@ -43,7 +44,7 @@ priv struct Style {
   mut fill_pattern : String?
   mut sketch : Bool?
   mut curved : Bool?
-} derive(Debug)
+}
 
 ///|
 fn Style::new() -> Style {
@@ -75,6 +76,7 @@ fn Style::new() -> Style {
 }
 
 ///|
+#derive(Debug)
 priv struct Object {
   id : String
   id_val : String
@@ -86,7 +88,7 @@ priv struct Object {
   mut raw_shape : String?
   style : Style
   children : Array[Object]
-  z_index : Int
+  z_index : Int32
   mut icon : String?
   mut icon_position : String?
   mut tooltip : String?
@@ -98,26 +100,26 @@ priv struct Object {
   sql_constraints : Array[String]
   mut width : Double?
   mut height : Double?
-  mut grid_rows : Int?
-  mut grid_columns : Int?
+  mut grid_rows : Int32?
+  mut grid_columns : Int32?
   mut grid_row_directed : Bool?
   mut grid_gap : Double?
   mut horizontal_gap : Double?
   mut vertical_gap : Double?
-  mut grid_column_span : Int?
-  mut grid_row_span : Int?
+  mut grid_column_span : Int32?
+  mut grid_row_span : Int32?
   mut near : String?
-  mut top : Int?
-  mut left : Int?
+  mut top : Int32?
+  mut left : Int32?
   mut direction : String?
-} derive(Debug)
+}
 
 ///|
 fn Object::new(
   id : String,
-  id_val? : String = id,
-  id_syntax? : String = id,
-  abs_id_syntax? : String = id,
+  id_val~ : String = id,
+  id_syntax~ : String = id,
+  abs_id_syntax~ : String = id,
 ) -> Object {
   {
     id,
@@ -163,8 +165,9 @@ fn Object::add_child(self : Object, child : Object) -> Unit {
 }
 
 ///|
+#derive(Debug)
 priv struct Edge {
-  index : Int
+  index : Int32
   src_id : String
   dst_id : String
   src_id_syntax : String
@@ -189,21 +192,21 @@ priv struct Edge {
   style : Style
   mut bend_points : Array[Point]?
   is_curve : Bool
-  z_index : Int
-  mut reference_count : Int
-  src_column_index : Int?
-  dst_column_index : Int?
-} derive(Debug)
+  z_index : Int32
+  mut reference_count : Int32
+  src_column_index : Int32?
+  dst_column_index : Int32?
+}
 
 ///|
 fn Edge::new(
-  index : Int,
+  index : Int32,
   src_id : String,
   dst_id : String,
   src_arrow : Bool,
   dst_arrow : Bool,
-  src_id_syntax? : String = src_id,
-  dst_id_syntax? : String = dst_id,
+  src_id_syntax~ : String = src_id,
+  dst_id_syntax~ : String = dst_id,
 ) -> Edge {
   {
     index,
@@ -247,29 +250,30 @@ fn Edge::new(
 }
 
 ///|
+#derive(Debug)
 priv enum LegendEntry {
   ShapeEntry(id~ : String, shape~ : ShapeType, label~ : String, style~ : Style?)
   ConnectionEntry(
     src_id~ : String,
     dst_id~ : String,
-    index~ : Int,
+    index~ : Int32,
     src_arrow_enabled~ : Bool,
     dst_arrow_enabled~ : Bool,
     src_arrow~ : ArrowheadType,
     dst_arrow~ : ArrowheadType,
     label~ : String,
-    style~ : Style?
+    style~ : Style?,
   )
   CustomEntry(icon~ : String, label~ : String)
   Separator
-} derive(Debug)
+}
 
 ///|
 fn LegendEntry::shape(
   shape : ShapeType,
   label : String,
   style : Style?,
-  id? : String = label,
+  id~ : String = label,
 ) -> LegendEntry {
   ShapeEntry(id~, shape~, label~, style~)
 }
@@ -280,11 +284,11 @@ fn LegendEntry::connection(
   dst_arrow : ArrowheadType,
   label : String,
   style : Style?,
-  src_id? : String = "src",
-  dst_id? : String = "dst",
-  index? : Int = 0,
-  src_arrow_enabled? : Bool = src_arrow != None,
-  dst_arrow_enabled? : Bool = dst_arrow != None,
+  src_id~ : String = "src",
+  dst_id~ : String = "dst",
+  index~ : Int32 = 0,
+  src_arrow_enabled~ : Bool = src_arrow != None,
+  dst_arrow_enabled~ : Bool = dst_arrow != None,
 ) -> LegendEntry {
   ConnectionEntry(
     src_id~,
@@ -310,6 +314,7 @@ fn LegendEntry::separator() -> LegendEntry {
 }
 
 ///|
+#derive(Debug)
 priv struct Legend {
   mut title : String?
   mut position : LegendPosition
@@ -319,7 +324,7 @@ priv struct Legend {
   mut padding : Double
   mut entry_gap : Double
   mut icon_size : Double
-} derive(Debug)
+}
 
 ///|
 fn Legend::new() -> Legend {
@@ -378,6 +383,7 @@ fn Legend::set_icon_size(self : Legend, icon_size : Double) -> Unit {
 }
 
 ///|
+#derive(Debug)
 priv struct Graph {
   name : String
   root : Object
@@ -388,39 +394,42 @@ priv struct Graph {
   steps : Array[Step]
   mut legend : Legend?
   mut is_folder_only : Bool
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 priv struct Layer {
   name : String
   graph : Graph
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 priv struct Scenario {
   name : String
   graph : Graph
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 priv struct Step {
   name : String
   graph : Graph
-} derive(Debug)
+}
 
 ///|
 fn Layer::new(name : String, graph : Graph) -> Layer {
-  { name, graph }
+  { name, graph, }
 }
 
 ///|
 fn Scenario::new(name : String, graph : Graph) -> Scenario {
-  { name, graph }
+  { name, graph, }
 }
 
 ///|
 fn Step::new(name : String, graph : Graph) -> Step {
-  { name, graph }
+  { name, graph, }
 }
 
 ///|
@@ -517,7 +526,7 @@ fn legend_entry_to_input(entry : LegendEntry) -> @graph.LegendEntryInput {
       src_arrow~,
       dst_arrow~,
       label~,
-      style~
+      style~,
     ) => {
       let style_input = match style {
         Some(s) => Some(style_to_input(s))
@@ -709,7 +718,7 @@ fn edge_to_input(edge : Edge) -> @graph.EdgeInput {
 }
 
 ///|
-fn compare_reference_ranges(a : @lexer.Range, b : @lexer.Range) -> Int {
+fn compare_reference_ranges(a : @lexer.Range, b : @lexer.Range) -> Int32 {
   if a.path != b.path {
     return a.path.compare(b.path)
   }
@@ -724,7 +733,7 @@ fn compare_reference_ranges(a : @lexer.Range, b : @lexer.Range) -> Int {
 
 ///|
 fn sort_object_array_by_references(objects : Array[Object]) -> Unit {
-  let original_index_by_id : Map[String, Int] = Map([])
+  let original_index_by_id : Map[String, Int32] = Map([])
   for i, obj in objects {
     original_index_by_id[obj.abs_id_syntax] = i
   }
@@ -744,7 +753,7 @@ fn sort_object_array_by_references(objects : Array[Object]) -> Unit {
 
 ///|
 fn sort_edge_array_by_references(edges : Array[Edge]) -> Unit {
-  let original_index_by_edge : Map[Int, Int] = Map([])
+  let original_index_by_edge : Map[Int32, Int32] = Map([])
   for i, edge in edges {
     original_index_by_edge[edge.index] = i
   }
@@ -902,12 +911,13 @@ fn graph_to_input(graph : Graph) -> @graph.GraphInput {
 
 ///|
 /// Compilation error
+#derive(Eq, Debug)
 pub(all) suberror GraphCompileError {
   InvalidShape(String)
   InvalidStyle(String)
   MissingObject(String)
   Semantic(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub impl Show for GraphCompileError with fn output(self, logger) {
@@ -1200,7 +1210,7 @@ fn canonicalize_board_link(
 fn board_graph_at_path(
   graph : Graph,
   path : Array[(String, Bool)],
-  index : Int,
+  index : Int32,
 ) -> Graph? {
   if index >= path.length() {
     return Some(graph)
@@ -1413,7 +1423,7 @@ fn is_root_board_link_path(path : Array[(String, Bool)]) -> Bool {
 fn has_board_path(
   graph : Graph,
   path : Array[(String, Bool)],
-  index : Int,
+  index : Int32,
 ) -> Bool {
   if index >= path.length() {
     return true
@@ -1487,7 +1497,7 @@ fn is_remote_or_absolute_link(s : String) -> Bool {
 }
 
 ///|
-fn string_index_of_char(s : String, target : Char) -> Int? {
+fn string_index_of_char(s : String, target : Char) -> Int32? {
   let mut index = 0
   for ch in s {
     if ch == target {
@@ -2012,8 +2022,8 @@ fn process_special_fields(
   }
   // When both dimensions are specified, D2 fills in the direction of the
   // keyword that appears first in the effective map.
-  let mut grid_rows_index : Int? = None
-  let mut grid_columns_index : Int? = None
+  let mut grid_rows_index : Int32? = None
+  let mut grid_columns_index : Int32? = None
   for index, field in ir.fields {
     if field.name_is_unquoted() {
       match field.name.to_lower() {
@@ -2142,7 +2152,7 @@ fn normalize_object_dimensions_for_shape(obj : Object) -> Unit {
 fn parse_non_negative_position(
   keyword : String,
   raw : String,
-) -> Int raise GraphCompileError {
+) -> Int32 raise GraphCompileError {
   match parse_int(raw) {
     Some(v) =>
       if v < 0 {
@@ -2812,8 +2822,8 @@ fn compile_edges_in_map(
   classes : Map[String, @ir.Map],
   prefix : String,
   prefix_syntax : String,
-  next_index : Int,
-) -> Int raise GraphCompileError {
+  next_index : Int32,
+) -> Int32 raise GraphCompileError {
   let mut next_index = next_index
   for field in ir.fields {
     if field.is_reserved_keyword_name() {
@@ -3786,7 +3796,7 @@ fn compile_legend(
   }
   let mut have_edges = false
   let mut added_sep = false
-  let edge_repeat_count : Map[String, Int] = Map([])
+  let edge_repeat_count : Map[String, Int32] = Map([])
   for edge in legend_graph.edges {
     if have_shapes && !added_sep {
       legend.add_entry(LegendEntry::separator())
@@ -4295,7 +4305,7 @@ fn parse_bend_points_array(arr : @ir.IRArray) -> Array[Point] {
 }
 
 ///|
-fn parse_int(s : String) -> Int? {
+fn parse_int(s : String) -> Int32? {
   try @string.parse_int(s) catch {
     _ => None
   } noraise {
@@ -4374,7 +4384,7 @@ fn normalize_sql_table_edge_endpoints(graph : Graph) -> Unit {
 fn sql_table_endpoint_info(
   object_by_abs_id_syntax : Map[String, Object],
   endpoint_abs_id_syntax : String,
-) -> (Object, Int)? {
+) -> (Object, Int32)? {
   let parent_abs_id_syntax = match
     parent_abs_id_syntax_of(endpoint_abs_id_syntax) {
     Some(v) => v
@@ -4827,7 +4837,7 @@ fn apply_d2_text_defaults(graph : Graph) -> Unit {
 }
 
 ///|
-fn container_level_label_size(level : Int) -> Int {
+fn container_level_label_size(level : Int32) -> Int32 {
   if level <= 1 {
     28
   } else if level == 2 {

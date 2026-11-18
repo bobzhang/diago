@@ -17,13 +17,15 @@
 
 ///|
 /// Graph-scoped metadata values aligned with the reference's current config data shape.
+#derive(Eq, Debug)
 pub(all) enum GraphDataValue {
   Text(String)
   StringArray(Array[String])
-} derive(Eq, Debug)
+}
 
 ///|
 /// Immutable legend configuration
+#derive(Debug)
 pub struct LegendModel {
   title : String?
   position : LegendPosition
@@ -33,7 +35,7 @@ pub struct LegendModel {
   padding : Double
   entry_gap : Double
   icon_size : Double
-} derive(Debug)
+}
 
 ///|
 pub fn LegendModel::new() -> LegendModel {
@@ -50,29 +52,31 @@ pub fn LegendModel::new() -> LegendModel {
 }
 
 ///|
+#derive(Debug)
 #warnings("-struct_never_constructed")
 pub struct FragmentOperandModel {
   /// Immutable sequence fragment operand
   condition : String?
   separator_y : Double
-} derive(Debug)
+}
 
 ///|
 /// Immutable sequence fragment
+#derive(Debug)
 pub struct SequenceFragmentModel {
   fragment_type : String
   condition : String?
   bbox : Box?
-  start_index : Int
-  end_index : Int
+  start_index : Int32
+  end_index : Int32
   operands : Array[FragmentOperandModel]
-} derive(Debug)
+}
 
 ///|
 pub fn SequenceFragmentModel::new(
   fragment_type : String,
-  start_index : Int,
-  end_index : Int,
+  start_index : Int32,
+  end_index : Int32,
 ) -> SequenceFragmentModel {
   {
     fragment_type,
@@ -85,21 +89,22 @@ pub fn SequenceFragmentModel::new(
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct ObjectReference {
   range : @lexer.Range
-  key_path_index : Int
+  key_path_index : Int32
   in_edge : Bool
   scope_abs_id_syntax : String?
   source_path : String?
   primary : Bool
   due_to_glob : Bool
   due_to_lazy_glob : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn ObjectReference::new(
   range : @lexer.Range,
-  key_path_index : Int,
+  key_path_index : Int32,
   in_edge : Bool,
   scope_abs_id_syntax : String?,
   source_path : String?,
@@ -120,20 +125,21 @@ pub fn ObjectReference::new(
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct EdgeReference {
   range : @lexer.Range
-  edge_index : Int
+  edge_index : Int32
   scope_abs_id_syntax : String?
   source_path : String?
   primary : Bool
   due_to_glob : Bool
   due_to_lazy_glob : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn EdgeReference::new(
   range : @lexer.Range,
-  edge_index : Int,
+  edge_index : Int32,
   scope_abs_id_syntax : String?,
   source_path : String?,
   primary : Bool,
@@ -153,6 +159,7 @@ pub fn EdgeReference::new(
 
 ///|
 /// Immutable style model
+#derive(Eq, Debug)
 pub struct StyleModel {
   opacity : StyleValue?
   stroke : StyleValue?
@@ -177,7 +184,7 @@ pub struct StyleModel {
   fill_pattern : StyleValue?
   sketch : StyleValue?
   curved : StyleValue?
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn StyleModel::new() -> StyleModel {
@@ -210,6 +217,7 @@ pub fn StyleModel::new() -> StyleModel {
 
 ///|
 /// Immutable object model
+#derive(Debug)
 pub struct ObjectModel {
   id : String
   id_val : String
@@ -222,7 +230,7 @@ pub struct ObjectModel {
   box : Box?
   label_box : Box?
   children : Array[ObjectModel]
-  z_index : Int
+  z_index : Int32
   icon : String?
   icon_position : String?
   tooltip : String?
@@ -232,25 +240,25 @@ pub struct ObjectModel {
   classes : Array[String]
   language : String?
   sql_constraints : Array[String]
-  grid_rows : Int?
-  grid_columns : Int?
+  grid_rows : Int32?
+  grid_columns : Int32?
   grid_gap : Double?
   horizontal_gap : Double?
   vertical_gap : Double?
-  grid_column_span : Int?
-  grid_row_span : Int?
+  grid_column_span : Int32?
+  grid_row_span : Int32?
   near : String?
-  top : Int?
-  left : Int?
+  top : Int32?
+  left : Int32?
   direction : String?
-} derive(Debug)
+}
 
 ///|
 pub fn ObjectModel::new(
   id : String,
-  id_val? : String = id,
-  id_syntax? : String = id,
-  abs_id_syntax? : String = id,
+  id_val~ : String = id,
+  id_syntax~ : String = id,
+  abs_id_syntax~ : String = id,
 ) -> ObjectModel {
   {
     id,
@@ -290,8 +298,9 @@ pub fn ObjectModel::new(
 
 ///|
 /// Immutable edge model
+#derive(Debug)
 pub struct EdgeModel {
-  index : Int
+  index : Int32
   src_id : String
   dst_id : String
   src_id_syntax : String
@@ -317,22 +326,22 @@ pub struct EdgeModel {
   route : Array[Point]
   bend_points : Array[Point]?
   is_curve : Bool
-  z_index : Int
-  reference_count : Int
+  z_index : Int32
+  reference_count : Int32
   label_box : Box?
-  src_column_index : Int?
-  dst_column_index : Int?
-} derive(Debug)
+  src_column_index : Int32?
+  dst_column_index : Int32?
+}
 
 ///|
 pub fn EdgeModel::new(
-  index : Int,
+  index : Int32,
   src_id : String,
   dst_id : String,
   src_arrow : Bool,
   dst_arrow : Bool,
-  src_id_syntax? : String = src_id,
-  dst_id_syntax? : String = dst_id,
+  src_id_syntax~ : String = src_id,
+  dst_id_syntax~ : String = dst_id,
 ) -> EdgeModel {
   {
     index,
@@ -379,6 +388,7 @@ pub fn EdgeModel::new(
 
 ///|
 /// Immutable graph model
+#derive(Debug)
 pub struct GraphModel {
   name : String
   root : ObjectModel
@@ -393,31 +403,34 @@ pub struct GraphModel {
   legend : LegendModel?
   is_folder_only : Bool
   data : Map[String, GraphDataValue]
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 #warnings("-struct_never_constructed")
 pub struct LayerModel {
   /// Immutable layer model
   name : String
   graph : GraphModel
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 #warnings("-struct_never_constructed")
 pub struct ScenarioModel {
   /// Immutable scenario model
   name : String
   graph : GraphModel
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 #warnings("-struct_never_constructed")
 pub struct StepModel {
   /// Immutable step model
   name : String
   graph : GraphModel
-} derive(Debug)
+}
 
 ///|
 pub fn GraphModel::new(name : String) -> GraphModel {

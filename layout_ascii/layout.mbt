@@ -30,15 +30,16 @@ using @graph {
 }
 
 ///|
+#derive(Debug)
 pub struct AsciiLayoutConfig {
-  min_box_width : Int
-  box_height : Int
-  h_padding : Int
-  v_spacing : Int
-  h_spacing : Int
-  min_width : Int
-  min_height : Int
-} derive(Debug)
+  min_box_width : Int32
+  box_height : Int32
+  h_padding : Int32
+  v_spacing : Int32
+  h_spacing : Int32
+  min_width : Int32
+  min_height : Int32
+}
 
 ///|
 pub fn AsciiLayoutConfig::new() -> AsciiLayoutConfig {
@@ -55,13 +56,13 @@ pub fn AsciiLayoutConfig::new() -> AsciiLayoutConfig {
 
 ///|
 pub fn AsciiLayoutConfig::from_parts(
-  min_box_width : Int,
-  box_height : Int,
-  h_padding : Int,
-  v_spacing : Int,
-  h_spacing : Int,
-  min_width : Int,
-  min_height : Int,
+  min_box_width : Int32,
+  box_height : Int32,
+  h_padding : Int32,
+  v_spacing : Int32,
+  h_spacing : Int32,
+  min_width : Int32,
+  min_height : Int32,
 ) -> AsciiLayoutConfig {
   {
     min_box_width,
@@ -78,61 +79,67 @@ pub fn AsciiLayoutConfig::from_parts(
 /// ASCII box position and size in character coordinates.
 ///
 /// `children` is used for structured shapes like sql_table.
+#derive(Debug)
 pub struct AsciiBox {
   id : String
-  x : Int
-  y : Int
-  width : Int
-  height : Int
+  x : Int32
+  y : Int32
+  width : Int32
+  height : Int32
   label : String
   shape : String
   is_container : Bool
   children : Array[AsciiBox]
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 pub struct GridPoint {
-  x : Int
-  y : Int
-} derive(Debug)
+  x : Int32
+  y : Int32
+}
 
 ///|
+#derive(Eq, Debug)
 pub enum ArrowDir {
   Up
   Down
   Left
   Right
-} derive(Eq, Debug)
+}
 
 ///|
+#derive(Debug)
 pub struct EdgePlan {
-  index : Int
-  ref_idx : Int
+  index : Int32
+  ref_idx : Int32
   points : Array[GridPoint]
   arrow : (GridPoint, ArrowDir)?
   label : String
   label_pos : GridPoint?
-} derive(Debug)
+}
 
 ///|
+#derive(Debug)
 pub struct LegendPlan {
-  x : Int
-  y : Int
-  width : Int
-  height : Int
+  x : Int32
+  y : Int32
+  width : Int32
+  height : Int32
   title : String?
-  rows : Array[(Int, Int, String)]
-  separators : Array[(Int, Int, Int)]
-} derive(Debug)
+  rows : Array[(Int32, Int32, String)]
+  separators : Array[(Int32, Int32, Int32)]
+}
 
 ///|
+#derive(Debug)
 pub struct AsciiPlan {
-  canvas_width : Int
-  canvas_height : Int
+  canvas_width : Int32
+  canvas_height : Int32
   boxes : Array[AsciiBox]
   edges : Array[EdgePlan]
   legend : (LegendInput, LegendPlan)?
-} derive(Debug)
+}
 
 ///|
 fn get_short_id(id : String) -> String {
@@ -177,7 +184,7 @@ fn object_children(obj : Shape, all_objects : Array[Shape]) -> Array[Shape] {
 }
 
 ///|
-fn max_i(a : Int, b : Int) -> Int {
+fn max_i(a : Int32, b : Int32) -> Int32 {
   if a > b {
     a
   } else {
@@ -274,8 +281,8 @@ fn compute_object_size(
   obj : Shape,
   all_objects : Array[Shape],
   config : AsciiLayoutConfig,
-  sizes : Map[String, (Int, Int)],
-) -> (Int, Int) {
+  sizes : Map[String, (Int32, Int32)],
+) -> (Int32, Int32) {
   match sizes.get(obj.id) {
     Some(size) => return size
     None => ()
@@ -337,12 +344,12 @@ fn compute_object_size(
 fn create_positioned_box(
   obj : Shape,
   all_objects : Array[Shape],
-  x : Int,
-  y : Int,
-  width : Int,
-  height : Int,
+  x : Int32,
+  y : Int32,
+  width : Int32,
+  height : Int32,
   config : AsciiLayoutConfig,
-  sizes : Map[String, (Int, Int)],
+  sizes : Map[String, (Int32, Int32)],
 ) -> AsciiBox {
   if obj.shape_type == SqlTable {
     let child_objects = object_children(obj, all_objects)
@@ -449,7 +456,7 @@ fn flatten_children(box : AsciiBox, result : Array[AsciiBox]) -> Unit {
 fn compute_canvas_size(
   boxes : Array[AsciiBox],
   config : AsciiLayoutConfig,
-) -> (Int, Int) {
+) -> (Int32, Int32) {
   let mut max_x = config.min_width
   let mut max_y = config.min_height
   for box in boxes {
@@ -466,7 +473,7 @@ fn compute_canvas_size(
 }
 
 ///|
-fn legend_size(legend : LegendInput) -> (Int, Int) {
+fn legend_size(legend : LegendInput) -> (Int32, Int32) {
   let width = 30
   let height = 3 + legend.entries.length() * 2
   (width, height)
@@ -475,9 +482,9 @@ fn legend_size(legend : LegendInput) -> (Int, Int) {
 ///|
 fn legend_offsets(
   position : LegendPosition,
-  width : Int,
-  height : Int,
-) -> (Int, Int) {
+  width : Int32,
+  height : Int32,
+) -> (Int32, Int32) {
   let dx = if position == TopLeft || position == BottomLeft {
     width + 4
   } else {
@@ -492,7 +499,11 @@ fn legend_offsets(
 }
 
 ///|
-fn shift_boxes(boxes : Array[AsciiBox], dx : Int, dy : Int) -> Array[AsciiBox] {
+fn shift_boxes(
+  boxes : Array[AsciiBox],
+  dx : Int32,
+  dy : Int32,
+) -> Array[AsciiBox] {
   if dx == 0 && dy == 0 {
     return boxes
   }
@@ -504,7 +515,7 @@ fn shift_boxes(boxes : Array[AsciiBox], dx : Int, dy : Int) -> Array[AsciiBox] {
 }
 
 ///|
-fn shift_box(box : AsciiBox, dx : Int, dy : Int) -> AsciiBox {
+fn shift_box(box : AsciiBox, dx : Int32, dy : Int32) -> AsciiBox {
   let shifted_children : Array[AsciiBox] = []
   for child in box.children {
     shifted_children.push(shift_box(child, dx, dy))
@@ -540,7 +551,7 @@ fn find_box(boxes : Array[AsciiBox], id : String) -> AsciiBox? {
 ///|
 fn plan_edge(
   edge : Connection,
-  ref_idx : Int,
+  ref_idx : Int32,
   boxes : Array[AsciiBox],
 ) -> EdgePlan? {
   let src_box = find_box(boxes, edge.src_id)
@@ -560,42 +571,42 @@ fn plan_edge(
       if dst.y > src.y {
         // Downward
         let x = dst_cx + offset
-        let start = { x, y: src_bottom }
-        let end = { x, y: dst_top }
+        let start = { x, y: src_bottom, }
+        let end = { x, y: dst_top, }
         points.push(start)
         points.push(end)
-        arrow = Some(({ x, y: dst_top }, Down))
+        arrow = Some(({ x, y: dst_top, }, Down))
       } else if src.y > dst.y {
         // Upward
         let x = dst_cx + offset
-        let start = { x, y: dst_bottom }
-        let end = { x, y: src_top }
+        let start = { x, y: dst_bottom, }
+        let end = { x, y: src_top, }
         points.push(start)
         points.push(end)
-        arrow = Some(({ x, y: src_top }, Up))
+        arrow = Some(({ x, y: src_top, }, Up))
       } else if dst.x > src.x {
         // Right
         let y = src.y + src.height / 2 + offset
-        let start = { x: src.x + src.width, y }
-        let end = { x: dst.x - 1, y }
+        let start = { x: src.x + src.width, y, }
+        let end = { x: dst.x - 1, y, }
         points.push(start)
         points.push(end)
-        arrow = Some(({ x: dst.x - 1, y }, Right))
+        arrow = Some(({ x: dst.x - 1, y, }, Right))
       } else {
         // Left
         let y = src.y + src.height / 2 + offset
-        let start = { x: src.x - 1, y }
-        let end = { x: dst.x + dst.width, y }
+        let start = { x: src.x - 1, y, }
+        let end = { x: dst.x + dst.width, y, }
         points.push(start)
         points.push(end)
-        arrow = Some(({ x: dst.x + dst.width, y }, Left))
+        arrow = Some(({ x: dst.x + dst.width, y, }, Left))
       }
       let label_pos = if edge.label != "" {
         match points {
           [p0, p1] =>
             if p0.x == p1.x {
               // Vertical: place label to the right of the line.
-              Some({ x: p0.x + 2, y: (p0.y + p1.y) / 2 })
+              Some({ x: p0.x + 2, y: (p0.y + p1.y) / 2, })
             } else if p0.y == p1.y {
               // Horizontal: place label above the line.
               Some({
@@ -624,7 +635,7 @@ fn plan_edge(
 }
 
 ///|
-fn truncate_string(s : String, max_len : Int) -> String {
+fn truncate_string(s : String, max_len : Int32) -> String {
   if s.length() <= max_len {
     return s
   }
@@ -659,11 +670,11 @@ fn connection_to_icon(src : ArrowheadType, dst : ArrowheadType) -> String {
 }
 
 ///|
-fn plan_legend(legend : LegendInput, x : Int, y : Int) -> LegendPlan {
+fn plan_legend(legend : LegendInput, x : Int32, y : Int32) -> LegendPlan {
   let width = 30
   let height = 3 + legend.entries.length() * 2
-  let rows : Array[(Int, Int, String)] = []
-  let separators : Array[(Int, Int, Int)] = []
+  let rows : Array[(Int32, Int32, String)] = []
+  let separators : Array[(Int32, Int32, Int32)] = []
   let mut current_y = y + 1
   let title = match legend.title {
     Some(t) => {
@@ -702,7 +713,7 @@ fn plan_legend(legend : LegendInput, x : Int, y : Int) -> LegendPlan {
     }
     current_y = current_y + 1
   }
-  { x, y, width, height, title, rows, separators }
+  { x, y, width, height, title, rows, separators, }
 }
 
 ///|
@@ -722,7 +733,7 @@ pub fn plan(diagram : Diagram, config : AsciiLayoutConfig) -> AsciiPlan {
     }
   }
   sort_shapes_by_y(roots)
-  let sizes : Map[String, (Int, Int)] = Map([])
+  let sizes : Map[String, (Int32, Int32)] = Map([])
   for obj in diagram.shapes {
     compute_object_size(obj, diagram.shapes, config, sizes) |> ignore
   }
@@ -837,5 +848,5 @@ pub fn plan(diagram : Diagram, config : AsciiLayoutConfig) -> AsciiPlan {
     }
     None => None
   }
-  { canvas_width, canvas_height, boxes, edges, legend }
+  { canvas_width, canvas_height, boxes, edges, legend, }
 }

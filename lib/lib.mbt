@@ -16,19 +16,21 @@
 /// Library-layer orchestration for layout and rendering.
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum OutputMode {
   Svg
   Ascii
   Unicode
-} derive(Debug, Eq)
+}
 
 ///|
+#derive(Debug, Eq)
 pub(all) enum LayoutEngine {
   Auto
   Dagre
   Elk
   Railway
-} derive(Debug, Eq)
+}
 
 ///|
 pub struct DiagramOptions {
@@ -112,7 +114,7 @@ pub fn DiagramOptions::with_route_plugin(
 pub struct RenderOptions {
   output_mode : OutputMode
   theme_name : String?
-  dark_theme_id : Int?
+  dark_theme_id : Int32?
   sketch : Bool?
   pad : Double?
   center : Bool?
@@ -161,7 +163,7 @@ pub fn RenderOptions::with_theme_name(
 ///|
 pub fn RenderOptions::with_dark_theme_id(
   self : RenderOptions,
-  dark_theme_id : Int?,
+  dark_theme_id : Int32?,
 ) -> RenderOptions {
   { ..self, dark_theme_id, }
 }
@@ -239,19 +241,20 @@ pub fn RenderOptions::with_omit_version(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum LibError {
   LayoutError(String)
   RenderError(String)
   ConfigError(String)
   TargetError(String)
   UnsupportedFeature(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn compile_diagram(
   graph_input : @graph.GraphInput,
   source_config : @diagram.Config?,
-  options? : DiagramOptions = DiagramOptions::new(),
+  options~ : DiagramOptions = DiagramOptions::new(),
 ) -> Result[@diagram.Diagram, LibError] {
   if graph_input.uses_latex_labels() {
     return Err(UnsupportedFeature("LaTeX labels are not supported"))
@@ -343,7 +346,7 @@ pub fn compile_diagram(
 ///|
 pub fn render(
   diagram : @diagram.Diagram,
-  options? : RenderOptions = RenderOptions::new(),
+  options~ : RenderOptions = RenderOptions::new(),
 ) -> Result[String, LibError] {
   if options.sketch.unwrap_or(false) {
     return Err(UnsupportedFeature("sketch rendering is not supported"))
@@ -561,10 +564,10 @@ fn select_target_board(
 ///|
 fn parse_target_selection(spec : String) -> Result[TargetSelection, String] {
   if spec == "*" {
-    return Ok({ path: [], no_children: false })
+    return Ok({ path: [], no_children: false, })
   }
   if spec.length() == 0 {
-    return Ok({ path: [], no_children: true })
+    return Ok({ path: [], no_children: true, })
   }
   let no_children = !spec.has_suffix(".*")
   let target = if no_children {
@@ -573,10 +576,10 @@ fn parse_target_selection(spec : String) -> Result[TargetSelection, String] {
     spec[:spec.length() - 2].to_owned()
   }
   if target.length() == 0 {
-    return Ok({ path: [], no_children })
+    return Ok({ path: [], no_children, })
   }
   match @parser.parse_key_path(target) {
-    Ok(key_path) => Ok({ path: key_path.to_strings(), no_children })
+    Ok(key_path) => Ok({ path: key_path.to_strings(), no_children, })
     Err(_) => Err("Invalid target: \{spec}")
   }
 }

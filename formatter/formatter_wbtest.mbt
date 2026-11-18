@@ -1,29 +1,29 @@
 ///|
-fn r(line : Int) -> @lexer.Range {
+fn r(line : Int32) -> @lexer.Range {
   let p = @lexer.Position::new(line, 0, line)
   @lexer.Range::new(p, p)
 }
 
 ///|
-fn r2(start_line : Int, end_line : Int) -> @lexer.Range {
+fn r2(start_line : Int32, end_line : Int32) -> @lexer.Range {
   let start = @lexer.Position::new(start_line, 0, start_line)
   let end = @lexer.Position::new(end_line, 0, end_line)
   @lexer.Range::new(start, end)
 }
 
 ///|
-fn uq(text : String, line : Int) -> @ast.StringValue {
+fn uq(text : String, line : Int32) -> @ast.StringValue {
   let range = r(line)
   Unquoted(@ast.UnquotedString::new(range, [Text(text)], []))
 }
 
 ///|
-fn kp(text : String, line : Int) -> @ast.KeyPath {
+fn kp(text : String, line : Int32) -> @ast.KeyPath {
   @ast.KeyPath::new(r(line), [uq(text, line)])
 }
 
 ///|
-fn key_with_value(name : String, value : @ast.Value, line : Int) -> @ast.Key {
+fn key_with_value(name : String, value : @ast.Value, line : Int32) -> @ast.Key {
   @ast.Key::new(
     r(line),
     false,
