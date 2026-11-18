@@ -27,7 +27,7 @@ pub fn highlight(request_len : Int32) -> Int32 {
 
 ///|
 fn syntax_tokens_to_json(tokens : Array[@diago.SyntaxToken]) -> String {
-  let output = StringBuilder::new()
+  let output = StringBuilder::StringBuilder()
   output.write_char('[')
   for index, token in tokens {
     if index > 0 {

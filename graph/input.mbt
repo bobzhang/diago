@@ -333,7 +333,7 @@ pub fn split_syntax_path(id : String) -> Array[String] {
     return []
   }
   let segments : Array[String] = []
-  let current = StringBuilder::new()
+  let current = StringBuilder::StringBuilder()
   let mut quote : Char? = None
   let mut escaped = false
   for ch in id {
@@ -392,7 +392,7 @@ pub fn display_key_segment(segment : String) -> String {
   if (quote != '"' && quote != '\'') || segment[segment.length() - 1] != quote {
     return segment
   }
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   let mut escaped = false
   for i = 1; i < segment.length() - 1; i = i + 1 {
     match segment[i].to_char() {

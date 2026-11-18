@@ -44,35 +44,37 @@ pub enum RenderPass {
   Foreground
 }
 
+#derive(@debug.Debug)
 pub struct SvgConfig {
   padding : Double
   center : Bool
   sketch : Bool
   font_family : String
-  font_size : Int
+  font_size : Int32
   background : String
   default_stroke : String
   default_fill : String
   default_stroke_width : Double
   arrow_size : Double
-  theme_id : Int
-  dark_theme_id : Int?
+  theme_id : Int32
+  dark_theme_id : Int32?
   theme_overrides : @diagram.ThemeOverrides?
   dark_theme_overrides : @diagram.ThemeOverrides?
   scale : Double?
   no_xml_tag : Bool
   salt : String?
   omit_version : Bool
-} derive(@debug.Debug)
+}
 pub fn SvgConfig::new() -> Self
 pub fn SvgConfig::with_padding(Self, Double) -> Self
-pub fn SvgConfig::with_render_options(Self, Int?, @diagram.ThemeOverrides?, @diagram.ThemeOverrides?, Bool, Bool, Double?, Bool, String?, Bool) -> Self
-pub fn SvgConfig::with_theme(Int) -> Self
+pub fn SvgConfig::with_render_options(Self, Int32?, @diagram.ThemeOverrides?, @diagram.ThemeOverrides?, Bool, Bool, Double?, Bool, String?, Bool) -> Self
+pub fn SvgConfig::with_theme(Int32) -> Self
 pub fn SvgConfig::with_theme_name(String) -> Self
 
+#derive(@debug.Debug)
 pub struct SvgRenderer {
   _marker : Unit
-} derive(@debug.Debug)
+}
 pub fn SvgRenderer::new() -> Self
 pub impl @render_api.Renderer for SvgRenderer
 

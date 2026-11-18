@@ -101,7 +101,7 @@ fn substring_range(s : String, start : Int32, end_ : Int32) -> String {
   if start >= end_ {
     return ""
   }
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i in start..<end_ {
     buf.write_char(s.code_unit_at(i).to_int().unsafe_to_char())
   }

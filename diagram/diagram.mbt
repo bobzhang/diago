@@ -472,7 +472,7 @@ pub fn Diagram::find_object(self : Diagram, id : String) -> Shape? {
 
 ///|
 pub fn Diagram::bytes(self : Diagram) -> String {
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   out.write_string(diagram_shape_array_json(self.shapes))
   out.write_string(diagram_connection_array_json(self.connections))
   out.write_string(diagram_shape_json(self.root))
@@ -562,7 +562,7 @@ pub fn Diagram::with_render_hash_config(
 
 ///|
 pub fn Diagram::get_nested_corpus(self : Diagram) -> String {
-  let corpus = StringBuilder::new()
+  let corpus = StringBuilder::StringBuilder()
   corpus.write_string(self.get_corpus())
   for board in self.layers {
     corpus.write_string(board.get_nested_corpus())
@@ -578,7 +578,7 @@ pub fn Diagram::get_nested_corpus(self : Diagram) -> String {
 
 ///|
 pub fn Diagram::get_corpus(self : Diagram) -> String {
-  let corpus = StringBuilder::new()
+  let corpus = StringBuilder::StringBuilder()
   let mut appendix_count = 0
   let suppressed_shape_ids : Map[String, Bool] = Map([])
   for shape in self.shapes {
@@ -768,7 +768,7 @@ fn shape_type_json(shape_type : @graph.ShapeType) -> String {
 
 ///|
 fn arrowhead_json(arrowhead : @graph.ArrowheadType) -> String {
-  json_string(arrowhead.to_string())
+  json_string(Show::to_string(arrowhead))
 }
 
 ///|
@@ -1041,7 +1041,7 @@ fn diagram_config_json(config : Config) -> String {
 
 ///|
 fn legend_corpus(legend : @graph.LegendInput) -> String {
-  let corpus = StringBuilder::new()
+  let corpus = StringBuilder::StringBuilder()
   match legend.title {
     Some(title) =>
       if title == "" {
@@ -1086,7 +1086,7 @@ fn short_shape_name(shape : Shape) -> String {
 ///|
 fn trim_surrounding_double_quotes(s : String) -> String {
   if s.length() >= 2 && s[0] == '"' && s[s.length() - 1] == '"' {
-    let out = StringBuilder::new()
+    let out = StringBuilder::StringBuilder()
     for i = 1; i < s.length() - 1; i = i + 1 {
       match s[i].to_char() {
         Some(ch) => out.write_char(ch)
@@ -1107,7 +1107,7 @@ fn split_class_member_visibility(raw_name : String) -> (String, Bool, String) {
   match raw_name[0].to_char() {
     Some(ch) =>
       if ch == '+' || ch == '-' || ch == '#' || ch == '~' {
-        let rest = StringBuilder::new()
+        let rest = StringBuilder::StringBuilder()
         for i = 1; i < raw_name.length(); i = i + 1 {
           match raw_name[i].to_char() {
             Some(c) => rest.write_char(c)
@@ -1169,7 +1169,7 @@ fn sql_table_constraint_abbr(child : Shape) -> String {
 
 ///|
 fn shape_structured_corpus(shape : Shape, all_shapes : Array[Shape]) -> String {
-  let corpus = StringBuilder::new()
+  let corpus = StringBuilder::StringBuilder()
   match shape.shape_type {
     Class =>
       for child in object_children(shape, all_shapes) {
@@ -1199,11 +1199,7 @@ fn d2_fnv32a(text : String) -> Int32 {
 
 ///|
 fn d2_u32_decimal(v : Int32) -> String {
-  let unsigned = if v < 0 {
-    Int64::from_int(v) + 4294967296L
-  } else {
-    Int64::from_int(v)
-  }
+  let unsigned = if v < 0 { v.to_int64() + 4294967296L } else { v.to_int64() }
   unsigned.to_string()
 }
 

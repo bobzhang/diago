@@ -3,5 +3,8 @@ import {
   "Milky2018/diago/layout_core",
   "Milky2018/diago/text_metrics",
   "moonbitlang/core/math",
-  "moonbitlang/core/debug",
 }
+
+import {
+  "moonbitlang/core/debug",
+} for "wbtest"

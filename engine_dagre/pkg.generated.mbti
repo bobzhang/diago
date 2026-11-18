@@ -5,17 +5,19 @@ import {
   "Milky2018/diago/engine_api",
   "Milky2018/diago/graph",
   "moonbitlang/core/debug",
+  "moonbitlang/core/json",
 }
 
 // Values
-pub fn debug_build_dagre_input_json(@graph.GraphInput, @engine_api.LayoutConfig, @engine_api.Direction) -> Json raise @engine_api.LayoutError
+pub fn debug_build_dagre_input_json(@graph.GraphInput, @engine_api.LayoutConfig, @engine_api.Direction) -> @json.Json raise @engine_api.LayoutError
 
 // Errors
 
 // Types and methods
+#derive(@debug.Debug)
 pub struct DagreEngine {
   _marker : Unit
-} derive(@debug.Debug)
+}
 pub fn DagreEngine::new() -> Self
 pub impl @engine_api.LayoutEngine for DagreEngine
 

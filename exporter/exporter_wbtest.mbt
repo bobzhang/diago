@@ -20,7 +20,7 @@ fn compile_source_graph(source : String) -> Result[@graph.GraphInput, String] {
   }
   let ir = @ir.compile(ast) catch { e => return Err("IR error: \{e}") }
   try compile("root", ir) catch {
-    err => Err(err.to_string())
+    err => Err(Show::to_string(err))
   } noraise {
     graph => Ok(graph)
   }
@@ -245,7 +245,7 @@ test "board graphs carry folder-only metadata" {
   let ir = @ir.Map::new()
   ir.add_field(@ir.Field::new("layers", None, Some(Map(layers_map)), []))
 
-  let graph = compile("root", ir) catch { e => fail(e.to_string()) }
+  let graph = compile("root", ir) catch { e => fail(Show::to_string(e)) }
   assert_true(graph.is_folder_only)
   @debug.assert_eq(graph.layers.length(), 1)
   assert_false(graph.layers[0].graph.is_folder_only)
@@ -1208,7 +1208,7 @@ test "graph objects preserve explicit language and sql constraints" {
   )
   ir.add_field(@ir.Field::new("orders", None, Some(Map(table_body)), []))
 
-  let graph = compile("root", ir) catch { e => fail(e.to_string()) }
+  let graph = compile("root", ir) catch { e => fail(Show::to_string(e)) }
   guard graph.find_object("snippet") is Some(snippet) else {
     fail("expected code object")
   }

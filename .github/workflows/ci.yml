@@ -9,13 +9,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        moonbit: [latest, pre-release]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
       - name: Set up MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "${{ matrix.moonbit }}"
           echo "$HOME/.moon/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
@@ -59,13 +63,14 @@ jobs:
       fail-fast: false
       matrix:
         node: [20, 22, 24]
+        moonbit: [latest, pre-release]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
       - name: Set up MoonBit
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "${{ matrix.moonbit }}"
           echo "$HOME/.moon/bin" >> $GITHUB_PATH
 
       - name: Set up Node.js ${{ matrix.node }}

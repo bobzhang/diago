@@ -162,7 +162,7 @@ fn scan_block_string_span(
   start : Int32,
 ) -> BlockStringSpan {
   let mut cursor = start + 1
-  let quote = StringBuilder::new()
+  let quote = StringBuilder::StringBuilder()
   while cursor < chars.length() {
     let char = chars[cursor]
     if is_block_string_tag_char_for_highlight(char) ||

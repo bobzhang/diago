@@ -84,7 +84,7 @@ pub fn compile_ir(
     @ir.ImportResolver::new(fn(_) { None }),
   )
   Ok(@ir.compile_with_imports(ast, resolver)) catch {
-    e => Err(IrError(e.to_string()))
+    e => Err(IrError(Show::to_string(e)))
   }
 }
 
@@ -103,7 +103,7 @@ pub fn compile_graph(
     Err(err) => return Err(err)
   }
   let base_graph_input = @exporter.to_graph(name, ir_map) catch {
-    e => return Err(GraphError(e.to_string()))
+    e => return Err(GraphError(Show::to_string(e)))
   }
   let graph_input = @graph.GraphInput::from_parts(
     base_graph_input.name,

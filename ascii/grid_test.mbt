@@ -14,7 +14,7 @@
 
 ///|
 test "grid new creates empty grid" {
-  let grid = Grid::new(5, 3)
+  let grid = @ascii.Grid::new(5, 3)
   @debug.assert_eq(grid.get_width(), 5)
   @debug.assert_eq(grid.get_height(), 3)
   @debug.assert_eq(grid.get(0, 0), ' ')
@@ -22,7 +22,7 @@ test "grid new creates empty grid" {
 
 ///|
 test "grid set and get" {
-  let grid = Grid::new(10, 10)
+  let grid = @ascii.Grid::new(10, 10)
   grid.set(5, 5, 'X')
   @debug.assert_eq(grid.get(5, 5), 'X')
   @debug.assert_eq(grid.get(0, 0), ' ')
@@ -30,7 +30,7 @@ test "grid set and get" {
 
 ///|
 test "grid text" {
-  let grid = Grid::new(20, 3)
+  let grid = @ascii.Grid::new(20, 3)
   grid.text(2, 1, "Hello")
   @debug.assert_eq(grid.get(2, 1), 'H')
   @debug.assert_eq(grid.get(3, 1), 'e')
@@ -39,7 +39,7 @@ test "grid text" {
 
 ///|
 test "grid hline" {
-  let grid = Grid::new(10, 5)
+  let grid = @ascii.Grid::new(10, 5)
   grid.hline(2, 7, 2, '-')
   @debug.assert_eq(grid.get(2, 2), '-')
   @debug.assert_eq(grid.get(4, 2), '-')
@@ -49,7 +49,7 @@ test "grid hline" {
 
 ///|
 test "grid vline" {
-  let grid = Grid::new(10, 10)
+  let grid = @ascii.Grid::new(10, 10)
   grid.vline(3, 1, 5, '|')
   @debug.assert_eq(grid.get(3, 1), '|')
   @debug.assert_eq(grid.get(3, 3), '|')
@@ -59,7 +59,7 @@ test "grid vline" {
 
 ///|
 test "grid rect" {
-  let grid = Grid::new(10, 6)
+  let grid = @ascii.Grid::new(10, 6)
   grid.rect(1, 1, 8, 4, '+', '-', '|')
   // Corners
   @debug.assert_eq(grid.get(1, 1), '+')
@@ -73,7 +73,7 @@ test "grid rect" {
 
 ///|
 test "grid to_string" {
-  let grid = Grid::new(5, 3)
+  let grid = @ascii.Grid::new(5, 3)
   grid.rect(0, 0, 4, 2, '+', '-', '|')
   inspect(
     grid.to_string(),
@@ -88,7 +88,7 @@ test "grid to_string" {
 
 ///|
 test "grid line vertical" {
-  let grid = Grid::new(5, 5)
+  let grid = @ascii.Grid::new(5, 5)
   grid.line(2, 0, 2, 4, '-', '|', '\\', '/')
   @debug.assert_eq(grid.get(2, 0), '|')
   @debug.assert_eq(grid.get(2, 2), '|')
@@ -97,7 +97,7 @@ test "grid line vertical" {
 
 ///|
 test "grid line horizontal" {
-  let grid = Grid::new(10, 3)
+  let grid = @ascii.Grid::new(10, 3)
   grid.line(1, 1, 8, 1, '-', '|', '\\', '/')
   @debug.assert_eq(grid.get(1, 1), '-')
   @debug.assert_eq(grid.get(4, 1), '-')
@@ -106,7 +106,7 @@ test "grid line horizontal" {
 
 ///|
 test "grid fill" {
-  let grid = Grid::new(6, 4)
+  let grid = @ascii.Grid::new(6, 4)
   grid.fill(1, 1, 4, 2, '#')
   @debug.assert_eq(grid.get(1, 1), '#')
   @debug.assert_eq(grid.get(4, 2), '#')
@@ -115,7 +115,7 @@ test "grid fill" {
 
 ///|
 test "box drawing" {
-  let grid = Grid::new(20, 5)
+  let grid = @ascii.Grid::new(20, 5)
   grid.rect(0, 0, 10, 4, '+', '-', '|')
   grid.text(2, 2, "Server")
   inspect(

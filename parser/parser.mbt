@@ -101,7 +101,7 @@ fn Parser::extract_source(
   end : @lexer.Position,
 ) -> String {
   let chars = self.source.to_array()
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i = start.offset; i < end.offset && i < chars.length(); i = i + 1 {
     buf.write_char(chars[i])
   }
@@ -1307,7 +1307,7 @@ fn Parser::parse_block_string(self : Parser) -> @ast.BlockString? {
   let mut i = start.offset + 1
 
   // Parse quote symbols (non-whitespace, non-[a-zA-Z0-9_]).
-  let quote_buf = StringBuilder::new()
+  let quote_buf = StringBuilder::StringBuilder()
   while i < chars.length() {
     let c = chars[i]
     if is_block_string_tag_char(c) || is_block_string_space(c) {
@@ -1319,7 +1319,7 @@ fn Parser::parse_block_string(self : Parser) -> @ast.BlockString? {
   let quote = quote_buf.to_string()
 
   // Parse tag (until whitespace).
-  let tag_buf = StringBuilder::new()
+  let tag_buf = StringBuilder::StringBuilder()
   while i < chars.length() {
     let c = chars[i]
     if is_block_string_space(c) {
@@ -1396,7 +1396,7 @@ fn Parser::parse_block_string(self : Parser) -> @ast.BlockString? {
 
 ///|
 fn Parser::get_indent(self : Parser) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   let n = self.depth * 2
   let mut i = 0
   while i < n {
@@ -1438,7 +1438,7 @@ fn starts_with_chars(
 ///|
 fn substring_by_offsets(s : String, start : Int32, end : Int32) -> String {
   let chars = s.to_array()
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   let mut i = start
   while i < end && i < chars.length() {
     buf.write_char(chars[i])
@@ -1501,7 +1501,7 @@ fn decode_unquoted_escape(c : Char) -> Char {
 ///|
 fn decode_unquoted_escapes(s : String) -> String {
   let chars = s.to_array()
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   let mut i = 0
   while i < chars.length() {
     let c = chars[i]
@@ -1548,7 +1548,7 @@ fn key_glob_pattern_from_text(s : String) -> Array[String] {
   let chars = s.to_array()
   let mut has_star = false
   let pattern : Array[String] = []
-  let part = StringBuilder::new()
+  let part = StringBuilder::StringBuilder()
   for c in chars {
     if c == '*' {
       has_star = true
@@ -1632,7 +1632,7 @@ fn split_lines(s : String) -> Array[String] {
 
 ///|
 fn join_lines(lines : Array[String]) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i, l in lines {
     if i > 0 {
       buf.write_char('\n')
@@ -1645,7 +1645,7 @@ fn join_lines(lines : Array[String]) -> String {
 ///|
 fn split_leading_indent(s : String, max_spaces : Int32) -> (String, String) {
   let chars = s.to_array()
-  let indent_buf = StringBuilder::new()
+  let indent_buf = StringBuilder::StringBuilder()
   let mut i = 0
   while i < chars.length() {
     let c = chars[i]
@@ -1673,7 +1673,7 @@ fn parse_double_quoted_interpolations(
 ) -> Array[@ast.Interpolation] {
   let segs : Array[@ast.Interpolation] = []
   let chars = content.to_array()
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   let mut i = 0
   while i < chars.length() {
     let c = chars[i]
@@ -1704,7 +1704,7 @@ fn parse_double_quoted_interpolations(
       if i + 1 < chars.length() && chars[i + 1] == '{' {
         let mut j = i + 2
         let parts : Array[String] = []
-        let part_buf = StringBuilder::new()
+        let part_buf = StringBuilder::StringBuilder()
         let mut ok = false
         while j < chars.length() {
           let cj = chars[j]
@@ -1743,7 +1743,7 @@ fn parse_double_quoted_interpolations(
       } else if i + 1 < chars.length() && is_ident_start_char(chars[i + 1]) {
         // $var form
         let mut j = i + 1
-        let name_buf = StringBuilder::new()
+        let name_buf = StringBuilder::StringBuilder()
         while j < chars.length() && is_ident_continue_char(chars[j]) {
           name_buf.write_char(chars[j])
           j = j + 1

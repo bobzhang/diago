@@ -18,7 +18,7 @@ fn compile(source : String) -> Result[String, String] {
     Ok(diagram) => {
       let render_config = @renderer_svg.SvgConfig::new()
       try @renderer_svg.render(diagram, render_config) catch {
-        e => Err(e.to_string())
+        e => Err(Show::to_string(e))
       } noraise {
         value => Ok(value)
       }

@@ -1,5 +1,8 @@
 import {
   "Milky2018/diago/xml_emit",
   "moonbitlang/core/math",
-  "moonbitlang/core/debug",
 }
+
+import {
+  "moonbitlang/core/debug",
+} for "test"

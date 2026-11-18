@@ -270,7 +270,7 @@ fn string_substring(s : String, start : Int32) -> String {
   if start >= s.length() {
     return ""
   }
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i in start..<s.length() {
     let code = s.code_unit_at(i).to_int()
     buf.write_char(code.unsafe_to_char())

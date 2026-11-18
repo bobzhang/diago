@@ -5,12 +5,18 @@ import {
   "Milky2018/diago/text_metrics",
   "moonbit-community/moon_dagre",
   "moonbitlang/core/math",
-  "moonbitlang/core/debug",
 }
 
 import {
   "Milky2018/diago/parser",
   "Milky2018/diago/ir",
   "Milky2018/diago/exporter",
+} for "test"
+
+import {
+  "moonbitlang/core/debug",
+} for "wbtest"
+
+import {
   "moonbitlang/core/debug",
 } for "test"

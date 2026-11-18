@@ -62,7 +62,7 @@ pub fn ParseErrors::is_empty(self : ParseErrors) -> Bool {
 
 ///|
 pub fn ParseErrors::to_string(self : ParseErrors) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i, err in self.errors {
     if i > 0 {
       buf.write_char('\n')

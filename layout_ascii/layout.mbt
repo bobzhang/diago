@@ -150,7 +150,7 @@ fn get_short_id(id : String) -> String {
     }
   }
   if last_dot >= 0 && last_dot < id.length() - 1 {
-    let buf = StringBuilder::new()
+    let buf = StringBuilder::StringBuilder()
     for i = last_dot + 1; i < id.length(); i = i + 1 {
       match id[i].to_char() {
         Some(c) => buf.write_char(c)
@@ -639,7 +639,7 @@ fn truncate_string(s : String, max_len : Int32) -> String {
   if s.length() <= max_len {
     return s
   }
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   let chars = s.to_array()
   for i = 0; i < max_len - 3; i = i + 1 {
     buf.write_char(chars[i])

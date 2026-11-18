@@ -12,9 +12,10 @@ import {
 // Errors
 
 // Types and methods
+#derive(@debug.Debug)
 pub struct RailwayEngine {
   _marker : Unit
-} derive(@debug.Debug)
+}
 pub fn RailwayEngine::new() -> Self
 pub impl @engine_api.LayoutEngine for RailwayEngine
 

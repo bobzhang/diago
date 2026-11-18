@@ -13,7 +13,7 @@ pub fn format(@ast.Map, FormatConfig) -> String
 // Types and methods
 pub struct FormatConfig {
   indent : String
-  max_width : Int
+  max_width : Int32
 }
 pub fn FormatConfig::new() -> Self
 

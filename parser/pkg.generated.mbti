@@ -17,22 +17,25 @@ pub fn parse_with_path(String, String) -> (@ast.Map, ParseErrors)
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub struct ParseError {
   range : @lexer.Range
   message : String
-} derive(Eq, @debug.Debug)
+}
 pub impl Show for ParseError
 
+#derive(Eq, @debug.Debug)
 pub struct ParseErrors {
   errors : Array[ParseError]
-} derive(Eq, @debug.Debug)
+}
 pub fn ParseErrors::add(Self, @lexer.Range, String) -> Unit
 pub fn ParseErrors::is_empty(Self) -> Bool
 pub fn ParseErrors::new() -> Self
 pub fn ParseErrors::to_string(Self) -> String
 pub impl Show for ParseErrors
 
-type Parser derive(@debug.Debug)
+#derive(@debug.Debug)
+type Parser
 pub fn Parser::new(String, Array[@lexer.Token]) -> Self
 
 // Type aliases
