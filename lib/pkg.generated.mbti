@@ -32,31 +32,34 @@ pub fn DiagramOptions::with_route_plugin(Self, ((@graph.GraphInput) -> Result[@g
 pub fn DiagramOptions::with_target_spec(Self, String?) -> Self
 pub fn DiagramOptions::with_theme_name(Self, String?) -> Self
 
+#derive(Eq, @debug.Debug)
 pub(all) enum LayoutEngine {
   Auto
   Dagre
   Elk
   Railway
-} derive(Eq, @debug.Debug)
+}
 
+#derive(Eq, @debug.Debug)
 pub(all) enum LibError {
   LayoutError(String)
   RenderError(String)
   ConfigError(String)
   TargetError(String)
   UnsupportedFeature(String)
-} derive(Eq, @debug.Debug)
+}
 
+#derive(Eq, @debug.Debug)
 pub(all) enum OutputMode {
   Svg
   Ascii
   Unicode
-} derive(Eq, @debug.Debug)
+}
 
 pub struct RenderOptions {
   output_mode : OutputMode
   theme_name : String?
-  dark_theme_id : Int?
+  dark_theme_id : Int32?
   sketch : Bool?
   pad : Double?
   center : Bool?
@@ -69,7 +72,7 @@ pub struct RenderOptions {
 }
 pub fn RenderOptions::new() -> Self
 pub fn RenderOptions::with_center(Self, Bool?) -> Self
-pub fn RenderOptions::with_dark_theme_id(Self, Int?) -> Self
+pub fn RenderOptions::with_dark_theme_id(Self, Int32?) -> Self
 pub fn RenderOptions::with_dark_theme_overrides(Self, @diagram.ThemeOverrides?) -> Self
 pub fn RenderOptions::with_no_xml_tag(Self, Bool?) -> Self
 pub fn RenderOptions::with_omit_version(Self, Bool?) -> Self

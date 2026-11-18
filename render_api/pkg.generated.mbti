@@ -14,21 +14,23 @@ pub fn render_failed(String) -> RenderError
 pub fn unsupported_format(String) -> RenderError
 
 // Errors
+#derive(Eq, @debug.Debug)
 pub(all) suberror RenderError {
   UnsupportedFormat(String)
   RenderFailed(String)
   InvalidDiagram(String)
-} derive(Eq, @debug.Debug)
+}
 pub impl Show for RenderError
 
 // Types and methods
+#derive(@debug.Debug)
 pub struct RenderConfig {
   padding : Double
   font_family : String
-  font_size : Int
+  font_size : Int32
   background : String
   dark_mode : Bool
-} derive(@debug.Debug)
+}
 pub fn RenderConfig::dark() -> Self
 pub fn RenderConfig::new() -> Self
 pub fn RenderConfig::with_padding(Double) -> Self

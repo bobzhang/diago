@@ -125,7 +125,7 @@ async fn bundle_svg_images_in_scope(
   let cache : Array[(String, String)] = []
   let failed_cache : Array[(String, String)] = []
   let error_hrefs : Array[String] = []
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   let mut cursor = 0
   while cursor < svg.length() {
     let image_start = match find_substring_from(svg, "<image", cursor) {
@@ -437,7 +437,7 @@ fn format_bundle_error_hrefs(error_hrefs : Array[String]) -> String {
   if error_hrefs.is_empty() {
     return "[]"
   }
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   out.write_char('[')
   let mut first = true
   for href in error_hrefs {
@@ -540,7 +540,7 @@ async fn read_remote_image_body(
   reader : &@io.Reader,
   url : String,
 ) -> Result[Bytes, String] {
-  let buffer = @buffer.Buffer(size_hint=4096)
+  let buffer = @buffer.Buffer(capacity=4096)
   while reader.read_some(max_len=64 * 1024) is Some(chunk) {
     if buffer.length() + chunk.length() > max_bundle_image_size {
       return Err(
@@ -963,7 +963,7 @@ fn find_substring_from(s : String, pattern : String, start : Int32) -> Int32? {
 
 ///|
 fn slice_string(s : String, start : Int32, end_exclusive : Int32) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   let mut i = start
   while i < end_exclusive {
     sb.write_char(char_at(s, i))

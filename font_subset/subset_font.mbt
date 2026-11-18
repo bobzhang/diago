@@ -142,7 +142,7 @@ fn write_u32_be(out : Array[Byte], v : Int32) -> Unit {
 
 ///|
 fn bytes4_to_string(bs : Array[Byte]) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   for b in bs {
     sb.write_char(b.to_int().unsafe_to_char())
   }

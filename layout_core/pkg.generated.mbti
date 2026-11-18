@@ -10,14 +10,15 @@ import {
 pub fn compile(@graph.GraphInput) -> LayoutProblem raise LayoutProblemError
 
 // Errors
+#derive(Eq, @debug.Debug)
 pub(all) suberror LayoutProblemError {
   DuplicateObjectId(String)
-  DuplicateEdgeIndex(Int)
+  DuplicateEdgeIndex(Int32)
   MissingChild(parent_id~ : String, child_id~ : String)
-  MissingEdgeEndpoint(edge_index~ : Int, endpoint_id~ : String)
+  MissingEdgeEndpoint(edge_index~ : Int32, endpoint_id~ : String)
   UnknownPatchNode(String)
-  UnknownPatchEdge(Int)
-} derive(Eq, @debug.Debug)
+  UnknownPatchEdge(Int32)
+}
 pub fn LayoutProblemError::message(Self) -> String
 
 // Types and methods
@@ -27,9 +28,10 @@ pub struct LayoutProblem {
 pub fn LayoutProblem::graph(Self) -> @graph.GraphInput
 pub fn LayoutProblem::validate_patch(Self, @graph.LayoutPatch) -> Unit raise LayoutProblemError
 
+#derive(Compare, Eq, Hash, @debug.Debug)
 pub struct ObjectId {
   // private fields
-} derive(Compare, Eq, Hash, @debug.Debug)
+}
 pub fn ObjectId::new(String) -> Self
 pub fn ObjectId::value(Self) -> String
 

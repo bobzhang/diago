@@ -23,7 +23,7 @@ test "dagre engine can layout simple graph" {
     e => fail("graph error: \{e}")
   }
   let laid_out = @engine_api.layout_with_engine(
-    DagreEngine::new(),
+    @engine_dagre.DagreEngine::new(),
     graph_input,
     @engine_api.LayoutConfig::new(),
     Down,
@@ -53,7 +53,7 @@ test "dagre layout preserves edge glob styles by edge index" {
     error => fail("graph error: \{error}")
   }
   let laid_out = @engine_api.layout_with_engine(
-    DagreEngine::new(),
+    @engine_dagre.DagreEngine::new(),
     graph,
     @engine_api.LayoutConfig::new(),
     Down,
@@ -105,7 +105,7 @@ test "dagre nested container padding matches D2 terminal theme geometry" {
   }
   let graph = base_graph.with_default_font("mono").with_caps_lock()
   let laid_out = @engine_api.layout_with_engine(
-    DagreEngine::new(),
+    @engine_dagre.DagreEngine::new(),
     graph,
     @engine_api.LayoutConfig::new(),
     Down,
@@ -147,7 +147,7 @@ test "dagre rejects LaTeX labels before layout" {
   }
   try
     @engine_api.layout_with_engine(
-      DagreEngine::new(),
+      @engine_dagre.DagreEngine::new(),
       graph,
       @engine_api.LayoutConfig::new(),
       Down,

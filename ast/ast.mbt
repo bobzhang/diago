@@ -555,7 +555,7 @@ pub fn StringValue::content(self : StringValue) -> String {
 
 ///|
 pub fn UnquotedString::to_string(self : UnquotedString) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for seg in self.value {
     match seg {
       Text(s) => buf.write_string(s)
@@ -577,7 +577,7 @@ pub fn UnquotedString::to_string(self : UnquotedString) -> String {
 
 ///|
 pub fn DoubleQuotedString::to_string(self : DoubleQuotedString) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for seg in self.value {
     match seg {
       Text(s) => buf.write_string(s)

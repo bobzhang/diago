@@ -110,7 +110,7 @@ fn Lexer::advance(self : Lexer) -> Char {
 
 ///|
 fn Lexer::slice_source(self : Lexer, start : Int32, end : Int32) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for i = start; i < end; i = i + 1 {
     if i < self.chars.length() {
       buf.write_char(self.chars[i])
@@ -404,7 +404,7 @@ fn Lexer::scan_triple_quoted_block_comment(
 
 ///|
 fn Lexer::scan_number(self : Lexer, start : Position, first : Char) -> Unit {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   buf.write_char(first)
   // Integer part
   while !self.is_at_end() && is_digit(self.peek()) {
@@ -432,7 +432,7 @@ fn Lexer::scan_number(self : Lexer, start : Position, first : Char) -> Unit {
 
 ///|
 fn Lexer::scan_identifier(self : Lexer, start : Position, first : Char) -> Unit {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   buf.write_char(first)
   if first == '\\' && !self.is_at_end() && self.peek() != '\n' {
     buf.write_char(self.advance())
@@ -593,7 +593,7 @@ fn substring_comment_by_offsets(
   end : Int32,
 ) -> String {
   let chars = s.to_array()
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   let mut i = start
   while i < end && i < chars.length() {
     buf.write_char(chars[i])

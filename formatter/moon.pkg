@@ -1,5 +1,8 @@
 import {
   "Milky2018/diago/ast",
   "Milky2018/diago/lexer",
-  "moonbitlang/core/debug",
 }
+
+import {
+  "moonbitlang/core/debug",
+} for "wbtest"

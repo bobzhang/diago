@@ -615,7 +615,7 @@ fn slice_string(s : String, start : Int32, end : Int32) -> String {
   } else {
     end
   }
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   for i in from..<to {
     sb.write_char(s.code_unit_at(i).to_int().unsafe_to_char())
   }

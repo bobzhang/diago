@@ -17,7 +17,6 @@ import {
   "moonbitlang/x/path",
   "moonbitlang/core/argparse",
   "moonbitlang/core/buffer",
-  "moonbitlang/core/debug",
   "moonbitlang/core/env",
   "moonbitlang/async",
   "moonbitlang/async/http",
@@ -31,3 +30,7 @@ import {
 pkgtype(kind: "executable")
 
 supported_targets = "+native"
+
+import {
+  "moonbitlang/core/debug",
+} for "wbtest"

@@ -1,5 +1,8 @@
 import {
   "Milky2018/diago/graph",
   "moonbitlang/core/encoding/utf8",
-  "moonbitlang/core/debug",
 }
+
+import {
+  "moonbitlang/core/debug",
+} for "wbtest"

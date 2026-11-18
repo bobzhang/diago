@@ -114,7 +114,7 @@ pub fn get_virtual_edge_index(node_id : String) -> Int32? {
 /// Split a string by a delimiter character
 fn split_string(s : String, delim : Char) -> Array[String] {
   let parts : Array[String] = []
-  let buf = StringBuilder::new()
+  let buf = StringBuilder::StringBuilder()
   for c in s {
     if c == delim {
       parts.push(buf.to_string())

@@ -287,7 +287,7 @@ pub fn Grid::fill(
 ///|
 /// Convert grid to string
 pub fn Grid::to_string(self : Grid) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   for row in self.cells {
     // Find last non-space character to trim trailing spaces
     let mut last_non_space = -1
@@ -361,7 +361,7 @@ pub fn Grid::to_compact_string(self : Grid, cs : CharSet) -> String {
 
   let mut prev_route_columns : Array[Int32] = []
   let mut prev_route_type : Char = ' '
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
 
   for row = start_row; row <= end_row; row = row + 1 {
     let row_data = self.cells[row]

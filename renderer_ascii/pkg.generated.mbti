@@ -16,18 +16,20 @@ pub fn render_ascii(@diagram.Diagram, AsciiConfig) -> String
 // Errors
 
 // Types and methods
+#derive(@debug.Debug)
 pub struct AsciiConfig {
   charset : @ascii.CharSet
   font_width : Double
   font_height : Double
   scale : Double
-} derive(@debug.Debug)
+}
 pub fn AsciiConfig::new() -> Self
 pub fn AsciiConfig::unicode() -> Self
 
+#derive(@debug.Debug)
 pub struct AsciiRenderer {
   _marker : Unit
-} derive(@debug.Debug)
+}
 pub fn AsciiRenderer::new() -> Self
 pub impl @render_api.Renderer for AsciiRenderer
 

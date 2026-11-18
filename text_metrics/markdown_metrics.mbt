@@ -443,7 +443,7 @@ fn markdown_measure_block(
 ///|
 /// Measure a markdown label using compatibility block layout constants.
 pub fn markdown_source_like_d2(text : String) -> String {
-  let out = StringBuilder::new()
+  let out = StringBuilder::StringBuilder()
   let mut preceding_backslashes = 0
   for i = 0; i < text.length(); i = i + 1 {
     match text[i].to_char() {

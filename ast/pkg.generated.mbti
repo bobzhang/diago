@@ -34,65 +34,74 @@ pub let tooltip_positions : Array[String]
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) enum ArrayNode {
   Comment(@lexer.Range, String)
   BlockComment(@lexer.Range, String)
   Substitution(Substitution)
   Import(Import)
   Value(Value)
-} derive(Eq, @debug.Debug)
+}
 pub fn ArrayNode::range(Self) -> @lexer.Range
 
+#derive(Eq, @debug.Debug)
 pub struct ArrayValue {
   range : @lexer.Range
   nodes : Array[ArrayNode]
-} derive(Eq, @debug.Debug)
+}
 pub fn ArrayValue::new(@lexer.Range, Array[ArrayNode]) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct BlockString {
   range : @lexer.Range
   quote : String
   tag : String
   value : String
-} derive(Eq, @debug.Debug)
+}
 pub fn BlockString::new(@lexer.Range, String, String, String) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct DoubleQuotedString {
   range : @lexer.Range
   value : Array[Interpolation]
-} derive(Eq, @debug.Debug)
+}
 pub fn DoubleQuotedString::new(@lexer.Range, Array[Interpolation]) -> Self
 pub fn DoubleQuotedString::to_string(Self) -> String
 
+#derive(Eq, @debug.Debug)
 pub struct Edge {
   range : @lexer.Range
   src : KeyPath
   src_arrow : String
   dst : KeyPath
   dst_arrow : String
-} derive(Eq, @debug.Debug)
+}
 pub fn Edge::new(@lexer.Range, KeyPath, KeyPath, String, String) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct EdgeIndex {
   range : @lexer.Range
-  index : Int?
+  index : Int32?
   glob : Bool
-} derive(Eq, @debug.Debug)
-pub fn EdgeIndex::new(@lexer.Range, Int?, Bool) -> Self
+}
+pub fn EdgeIndex::new(@lexer.Range, Int32?, Bool) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct Import {
   range : @lexer.Range
   spread : Bool
   pre : String
   path : Array[StringValue]
-} derive(Eq, @debug.Debug)
+}
 pub fn Import::new(@lexer.Range, Bool, String, Array[StringValue]) -> Self
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Interpolation {
   Text(String)
   Sub(Substitution)
-} derive(Eq, @debug.Debug)
+}
 
+#derive(Eq, @debug.Debug)
 pub struct Key {
   range : @lexer.Range
   ampersand : Bool
@@ -103,33 +112,37 @@ pub struct Key {
   edge_key : KeyPath?
   primary : Scalar?
   value : Value?
-} derive(Eq, @debug.Debug)
+}
 pub fn Key::new(@lexer.Range, Bool, Bool, KeyPath?, Array[Edge], EdgeIndex?, KeyPath?, Scalar?, Value?) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct KeyPath {
   range : @lexer.Range
   path : Array[StringValue]
-} derive(Eq, @debug.Debug)
+}
 pub fn KeyPath::has_glob(Self) -> Bool
 pub fn KeyPath::last(Self) -> StringValue?
 pub fn KeyPath::new(@lexer.Range, Array[StringValue]) -> Self
 pub fn KeyPath::to_strings(Self) -> Array[String]
 
+#derive(Eq, @debug.Debug)
 pub struct Map {
   range : @lexer.Range
   nodes : Array[MapNode]
-} derive(Eq, @debug.Debug)
+}
 pub fn Map::new(@lexer.Range, Array[MapNode]) -> Self
 
+#derive(Eq, @debug.Debug)
 pub(all) enum MapNode {
   Comment(@lexer.Range, String)
   BlockComment(@lexer.Range, String)
   Substitution(Substitution)
   Import(Import)
   Key(Key)
-} derive(Eq, @debug.Debug)
+}
 pub fn MapNode::range(Self) -> @lexer.Range
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Node {
   Map(Map)
   MapNode(MapNode)
@@ -147,50 +160,55 @@ pub(all) enum Node {
   BlockString(BlockString)
   Substitution(Substitution)
   Import(Import)
-} derive(Eq, @debug.Debug)
+}
 pub fn Node::children(Self) -> Array[Self]
 pub fn Node::node_type(Self) -> String
 pub fn Node::range(Self) -> @lexer.Range
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Scalar {
   Null(@lexer.Range)
   Boolean(@lexer.Range, Bool)
   Number(@lexer.Range, String)
   String(StringValue)
-} derive(Eq, @debug.Debug)
+}
 pub fn Scalar::range(Self) -> @lexer.Range
 
+#derive(Eq, @debug.Debug)
 pub(all) enum StringValue {
   Unquoted(UnquotedString)
   SingleQuoted(@lexer.Range, String)
   DoubleQuoted(DoubleQuotedString)
   Block(BlockString)
-} derive(Eq, @debug.Debug)
+}
 pub fn StringValue::content(Self) -> String
 pub fn StringValue::range(Self) -> @lexer.Range
 
+#derive(Eq, @debug.Debug)
 pub struct Substitution {
   range : @lexer.Range
   spread : Bool
   path : Array[StringValue]
-} derive(Eq, @debug.Debug)
+}
 pub fn Substitution::new(@lexer.Range, Bool, Array[StringValue]) -> Self
 
+#derive(Eq, @debug.Debug)
 pub struct UnquotedString {
   range : @lexer.Range
   value : Array[Interpolation]
   pattern : Array[String]
-} derive(Eq, @debug.Debug)
+}
 pub fn UnquotedString::new(@lexer.Range, Array[Interpolation], Array[String]) -> Self
 pub fn UnquotedString::to_string(Self) -> String
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Value {
   Scalar(Scalar)
   Array(ArrayValue)
   Map(Map)
   Import(Import)
   BlockScalar(Value, Map)
-} derive(Eq, @debug.Debug)
+}
 pub fn Value::range(Self) -> @lexer.Range
 
 // Type aliases

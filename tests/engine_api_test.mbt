@@ -430,7 +430,7 @@ test "engine implementations must not mutate input graph" {
   let edges = [@graph.EdgeInput::new(0, "a", "b", false, true)]
   let graph = graph_input("pure", ["a", "b"], objects, edges, [], [], [])
 
-  // Snapshot relevant layout state before calling engine.layout(...)
+  // Snapshot relevant layout state before calling @engine_api.LayoutEngine::layout(engine, ...)
   let boxes_before : Array[@graph.Box?] = []
   for obj in graph.get_objects() {
     boxes_before.push(obj.box)
@@ -441,11 +441,11 @@ test "engine implementations must not mutate input graph" {
   }
   let engine = @engine_dagre.DagreEngine::new()
   let config = @engine_api.LayoutConfig::new()
-  ignore(engine.layout(graph, config, Down)) catch {
+  ignore(@engine_api.LayoutEngine::layout(engine, graph, config, Down)) catch {
     e => fail("engine.layout should not fail: \{e}")
   }
 
-  // Input graph must remain unchanged after engine.layout(...)
+  // Input graph must remain unchanged after @engine_api.LayoutEngine::layout(engine, ...)
   let mut i = 0
   for obj in graph.get_objects() {
     @debug.assert_eq(obj.box, boxes_before[i])

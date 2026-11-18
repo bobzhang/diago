@@ -29,7 +29,7 @@ fn compile(source : String) -> Result[String, String] {
     Ok(diagram) => {
       let render_config = @renderer_svg.SvgConfig::new()
       try @renderer_svg.render(diagram, render_config) catch {
-        e => Err(e.to_string())
+        e => Err(Show::to_string(e))
       } noraise {
         v => Ok(v)
       }
@@ -540,7 +540,7 @@ fn compile_with_theme(
   let diagram = @diagram.from_graph(laid_out_graph, None)
   let render_config = @renderer_svg.SvgConfig::with_theme(theme_id)
   try @renderer_svg.render(diagram, render_config) catch {
-    e => Err(e.to_string())
+    e => Err(Show::to_string(e))
   } noraise {
     v => Ok(v)
   }

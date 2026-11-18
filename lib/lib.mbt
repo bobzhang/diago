@@ -309,7 +309,7 @@ pub fn compile_diagram(
             config,
             options.direction,
           ) catch {
-            e => return Err(LayoutError(e.to_string()))
+            e => return Err(LayoutError(Show::to_string(e)))
           }
         Elk =>
           @engine_api.layout_with_engine(
@@ -318,7 +318,7 @@ pub fn compile_diagram(
             config,
             options.direction,
           ) catch {
-            e => return Err(LayoutError(e.to_string()))
+            e => return Err(LayoutError(Show::to_string(e)))
           }
         Railway =>
           @engine_api.layout_with_engine(
@@ -327,7 +327,7 @@ pub fn compile_diagram(
             config,
             options.direction,
           ) catch {
-            e => return Err(LayoutError(e.to_string()))
+            e => return Err(LayoutError(Show::to_string(e)))
           }
       }
   }
@@ -363,7 +363,7 @@ pub fn render(
         render_config.sketch,
       )
       Ok(@renderer_svg.render(diagram, render_config)) catch {
-        e => Err(RenderError(e.to_string()))
+        e => Err(RenderError(Show::to_string(e)))
       }
     }
     Ascii =>

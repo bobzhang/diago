@@ -178,7 +178,7 @@ fn replace_extension(path : String, new_ext : String) -> String {
   }
   if last_dot > 0 {
     // Build base string manually
-    let buf = StringBuilder::new()
+    let buf = StringBuilder::StringBuilder()
     for j in 0..<last_dot {
       buf.write_char(path.code_unit_at(j).to_int().unsafe_to_char())
     }
@@ -437,7 +437,7 @@ fn string_slice(s : String, start : Int32, end : Int32) -> String {
   if start < 0 || end < start || end > s.length() {
     return ""
   }
-  let sb = StringBuilder::new()
+  let sb = StringBuilder::StringBuilder()
   for i in start..<end {
     sb.write_char(s.code_unit_at(i).to_int().unsafe_to_char())
   }
