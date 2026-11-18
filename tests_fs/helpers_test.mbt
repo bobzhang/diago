@@ -88,7 +88,7 @@ fn find_connection(
 fn assert_route_points_close(
   actual : Array[@graph.Point],
   expected : Array[@graph.Point],
-  tolerance? : Double = 1.0e-3,
+  tolerance~ : Double = 1.0e-3,
 ) -> Unit raise {
   @debug.assert_eq(actual.length(), expected.length())
   for i in 0..<actual.length() {

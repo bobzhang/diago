@@ -87,7 +87,7 @@ pub struct Element {
 ///|
 /// Create a new element builder
 pub fn Element::new(tag : String) -> Element {
-  { tag, attrs: [], content: "", children: [], self_closing: false }
+  { tag, attrs: [], content: "", children: [], self_closing: false, }
 }
 
 ///|
@@ -123,7 +123,11 @@ pub fn Element::attr_num(
 
 ///|
 /// Add an integer attribute
-pub fn Element::attr_int(self : Element, name : String, value : Int) -> Element {
+pub fn Element::attr_int(
+  self : Element,
+  name : String,
+  value : Int32,
+) -> Element {
   self.attrs.push((name, value.to_string()))
   self
 }
@@ -145,7 +149,7 @@ pub fn Element::attr_num_if(
 ///|
 /// Set text content (will be escaped)
 pub fn Element::text(self : Element, content : String) -> Element {
-  { ..self, content: escape(content) }
+  { ..self, content: escape(content), }
 }
 
 ///|
@@ -179,7 +183,7 @@ pub fn Element::children(self : Element, children : Array[String]) -> Element {
 ///|
 /// Mark as self-closing element (e.g., <br/>)
 pub fn Element::self_close(self : Element) -> Element {
-  { ..self, self_closing: true }
+  { ..self, self_closing: true, }
 }
 
 ///|
@@ -296,7 +300,7 @@ pub struct Document {
 ///|
 /// Create a new XML document
 pub fn Document::new() -> Document {
-  { version: "1.0", encoding: "UTF-8", root: "", elements: [] }
+  { version: "1.0", encoding: "UTF-8", root: "", elements: [], }
 }
 
 ///|

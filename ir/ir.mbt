@@ -22,25 +22,28 @@
 /// A scalar value in the IR.
 ///
 /// Scalars carry a source `range` for error reporting and reference tracking.
+#derive(Eq, Debug)
 pub struct Scalar {
   value : ScalarValue
   range : @lexer.Range
   ast : @ast.Node?
   source_path : String?
   path : NodePath?
-} derive(Eq, Debug)
+}
 
 ///|
 /// Types of scalar values
+#derive(Eq, Debug)
 pub(all) enum ScalarValue {
   Null
   Bool(String)
   Number(String)
   String(@ast.StringValue)
-} derive(Eq, Debug)
+}
 
 ///|
 /// An IR Map containing fields and edges
+#derive(Eq, Debug)
 pub struct Map {
   fields : Array[Field]
   edges : Array[Edge]
@@ -48,10 +51,11 @@ pub struct Map {
   import_ast : @ast.Node?
   source_path : String?
   path : NodePath?
-} derive(Eq, Debug)
+}
 
 ///|
 /// A field in the IR map
+#derive(Eq, Debug)
 pub struct Field {
   name : String
   name_syntax : @ast.StringValue?
@@ -60,34 +64,38 @@ pub struct Field {
   references : Array[FieldReference]
   import_ast : @ast.Node?
   path : NodePath?
-} derive(Eq, Debug)
+}
 
 ///|
 /// Composite values (Array or Map)
+#derive(Eq, Debug)
 pub(all) enum Composite {
   Array(IRArray)
   Map(Map)
-} derive(Eq, Debug)
+}
 
 ///|
 /// An array of values
+#derive(Eq, Debug)
 pub struct IRArray {
   values : Array[Value]
   ast : @ast.Node?
   source_path : String?
   path : NodePath?
-} derive(Eq, Debug)
+}
 
 ///|
 /// Value types in IR
+#derive(Eq, Debug)
 pub(all) enum Value {
   Scalar(Scalar)
   Array(IRArray)
   Map(Map)
-} derive(Eq, Debug)
+}
 
 ///|
 /// An edge in the IR
+#derive(Eq, Debug)
 pub struct Edge {
   id : EdgeID
   primary : Scalar?
@@ -95,10 +103,11 @@ pub struct Edge {
   references : Array[EdgeReference]
   import_ast : @ast.Node?
   path : NodePath?
-} derive(Eq, Debug)
+}
 
 ///|
 /// Unique identifier for an edge
+#derive(Eq, Debug)
 pub struct EdgeID {
   src_path : Array[String]
   src_path_syntax : Array[@ast.StringValue]
@@ -106,70 +115,77 @@ pub struct EdgeID {
   dst_path : Array[String]
   dst_path_syntax : Array[@ast.StringValue]
   dst_arrow : Bool
-  index : Int?
+  index : Int32?
   glob : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 /// Stable path to an IR node inside a compiled map.
+#derive(Eq, Debug)
 pub(all) enum NodePathSegment {
   FieldStep(String, Bool)
   EdgeStep(EdgeID)
   PrimaryStep
   CompositeStep
-  ArrayItemStep(Int)
-} derive(Eq, Debug)
+  ArrayItemStep(Int32)
+}
 
 ///|
 /// Stable path to an IR node inside a compiled map.
+#derive(Eq, Debug)
 pub struct NodePath {
   segments : Array[NodePathSegment]
-} derive(Eq, Debug)
+}
 
 ///|
 /// Reference context for a field or edge reference.
+#derive(Eq, Debug)
 pub struct RefContext {
   edge : @ast.Edge?
   key : @ast.Key?
   scope : @ast.Map?
   source_path : String?
-} derive(Eq, Debug)
+}
 
 ///|
 /// Reference to a field from the AST
+#derive(Eq, Debug)
 pub struct FieldReference {
   range : @lexer.Range
   string : String
   syntax : @ast.StringValue?
   key_path : @ast.KeyPath?
   context : RefContext?
-  key_path_index : Int
+  key_path_index : Int32
   primary : Bool
   due_to_glob : Bool
   due_to_lazy_glob : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 /// Reference to an edge from the AST
+#derive(Eq, Debug)
 pub struct EdgeReference {
   range : @lexer.Range
   edge : @ast.Edge?
   context : RefContext?
-  edge_index : Int
+  edge_index : Int32
   primary : Bool
   due_to_glob : Bool
   due_to_lazy_glob : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 /// Boxed reference for generic traversal.
+#derive(Eq, Debug)
 pub(all) enum Reference {
   FieldRef(FieldReference)
   EdgeRef(EdgeReference)
-} derive(Eq, Debug)
+}
 
 ///|
 /// Boxed IR node for generic traversal.
+#derive(Eq, Debug)
 pub(all) enum Node {
   Scalar(Scalar)
   Field(Field)
@@ -178,7 +194,7 @@ pub(all) enum Node {
   Map(Map)
   Composite(Composite)
   Value(Value)
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn Node::node_type(self : Node) -> String {
@@ -318,7 +334,7 @@ pub fn Node::last_primary_key(self : Node) -> @ast.Key? {
 
 ///|
 pub fn NodePath::root() -> NodePath {
-  { segments: [] }
+  { segments: [], }
 }
 
 ///|
@@ -450,16 +466,16 @@ fn field_name_matches(
 
 ///|
 pub fn Scalar::at(range : @lexer.Range, value : ScalarValue) -> Scalar {
-  { value, range, ast: None, source_path: None, path: None }
+  { value, range, ast: None, source_path: None, path: None, }
 }
 
 ///|
 pub fn Scalar::from_ast(
   ast : @ast.Node,
   value : ScalarValue,
-  source_path? : String? = None,
+  source_path~ : String? = None,
 ) -> Scalar {
-  { value, range: ast.range(), ast: Some(ast), source_path, path: None }
+  { value, range: ast.range(), ast: Some(ast), source_path, path: None, }
 }
 
 ///|
@@ -502,7 +518,7 @@ pub fn Map::new() -> Map {
 }
 
 ///|
-pub fn Map::from_ast(ast : @ast.Map, source_path? : String? = None) -> Map {
+pub fn Map::from_ast(ast : @ast.Map, source_path~ : String? = None) -> Map {
   {
     fields: [],
     edges: [],
@@ -519,7 +535,7 @@ pub fn Field::new(
   primary : Scalar?,
   composite : Composite?,
   references : Array[FieldReference],
-  name_syntax? : @ast.StringValue? = None,
+  name_syntax~ : @ast.StringValue? = None,
 ) -> Field {
   {
     name,
@@ -535,7 +551,7 @@ pub fn Field::new(
 ///|
 pub fn Field::simple(
   name : String,
-  name_syntax? : @ast.StringValue? = None,
+  name_syntax~ : @ast.StringValue? = None,
 ) -> Field {
   {
     name,
@@ -550,16 +566,16 @@ pub fn Field::simple(
 
 ///|
 pub fn IRArray::new(values : Array[Value]) -> IRArray {
-  { values, ast: None, source_path: None, path: None }
+  { values, ast: None, source_path: None, path: None, }
 }
 
 ///|
 pub fn IRArray::from_ast(
   ast : @ast.ArrayValue,
   values : Array[Value],
-  source_path? : String? = None,
+  source_path~ : String? = None,
 ) -> IRArray {
-  { values, ast: Some(ArrayValue(ast)), source_path, path: None }
+  { values, ast: Some(ArrayValue(ast)), source_path, path: None, }
 }
 
 ///|
@@ -569,7 +585,7 @@ pub fn Edge::new(
   map : Map?,
   references : Array[EdgeReference],
 ) -> Edge {
-  { id, primary, map, references, import_ast: None, path: None }
+  { id, primary, map, references, import_ast: None, path: None, }
 }
 
 ///|
@@ -578,8 +594,8 @@ pub fn EdgeID::new(
   dst_path : Array[String],
   src_arrow : Bool,
   dst_arrow : Bool,
-  src_path_syntax? : Array[@ast.StringValue]? = None,
-  dst_path_syntax? : Array[@ast.StringValue]? = None,
+  src_path_syntax~ : Array[@ast.StringValue]? = None,
+  dst_path_syntax~ : Array[@ast.StringValue]? = None,
 ) -> EdgeID {
   {
     src_path,
@@ -605,9 +621,9 @@ pub fn EdgeID::with_index(
   dst_path : Array[String],
   src_arrow : Bool,
   dst_arrow : Bool,
-  index : Int,
-  src_path_syntax? : Array[@ast.StringValue]? = None,
-  dst_path_syntax? : Array[@ast.StringValue]? = None,
+  index : Int32,
+  src_path_syntax~ : Array[@ast.StringValue]? = None,
+  dst_path_syntax~ : Array[@ast.StringValue]? = None,
 ) -> EdgeID {
   {
     src_path,
@@ -633,8 +649,8 @@ pub fn EdgeID::with_glob(
   dst_path : Array[String],
   src_arrow : Bool,
   dst_arrow : Bool,
-  src_path_syntax? : Array[@ast.StringValue]? = None,
-  dst_path_syntax? : Array[@ast.StringValue]? = None,
+  src_path_syntax~ : Array[@ast.StringValue]? = None,
+  dst_path_syntax~ : Array[@ast.StringValue]? = None,
 ) -> EdgeID {
   {
     src_path,
@@ -658,7 +674,7 @@ pub fn EdgeID::with_glob(
 pub fn FieldReference::new(
   range : @lexer.Range,
   string : String,
-  key_path_index : Int,
+  key_path_index : Int32,
   primary : Bool,
 ) -> FieldReference {
   {
@@ -679,20 +695,20 @@ pub fn RefContext::new(
   edge : @ast.Edge?,
   key : @ast.Key?,
   scope : @ast.Map?,
-  source_path? : String? = None,
+  source_path~ : String? = None,
 ) -> RefContext {
-  { edge, key, scope, source_path }
+  { edge, key, scope, source_path, }
 }
 
 ///|
 pub fn FieldReference::from_ast(
   syntax : @ast.StringValue,
   key_path : @ast.KeyPath,
-  key_path_index : Int,
+  key_path_index : Int32,
   primary : Bool,
   context : RefContext,
-  due_to_glob? : Bool = false,
-  due_to_lazy_glob? : Bool = false,
+  due_to_glob~ : Bool = false,
+  due_to_lazy_glob~ : Bool = false,
 ) -> FieldReference {
   {
     range: syntax.range(),
@@ -710,7 +726,7 @@ pub fn FieldReference::from_ast(
 ///|
 pub fn EdgeReference::new(
   range : @lexer.Range,
-  edge_index : Int,
+  edge_index : Int32,
   primary : Bool,
 ) -> EdgeReference {
   {
@@ -727,11 +743,11 @@ pub fn EdgeReference::new(
 ///|
 pub fn EdgeReference::from_ast(
   edge : @ast.Edge,
-  edge_index : Int,
+  edge_index : Int32,
   primary : Bool,
   context : RefContext,
-  due_to_glob? : Bool = false,
-  due_to_lazy_glob? : Bool = false,
+  due_to_glob~ : Bool = false,
+  due_to_lazy_glob~ : Bool = false,
 ) -> EdgeReference {
   {
     range: edge.range,
@@ -880,7 +896,7 @@ pub fn Map::reindex_paths(self : Map) -> Map {
 fn get_node_from_map(
   m : Map,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   if index == segments.length() {
     return Some(Map(m))
@@ -912,7 +928,7 @@ fn get_node_from_map(
 fn get_node_from_field(
   field : Field,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   if index == segments.length() {
     return Some(Field(field))
@@ -942,7 +958,7 @@ fn get_node_from_field(
 fn get_node_from_edge(
   edge : Edge,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   if index == segments.length() {
     return Some(Edge(edge))
@@ -971,7 +987,7 @@ fn get_node_from_edge(
 fn get_node_from_composite(
   composite : Composite,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   match composite {
     Array(array) => get_node_from_array(array, segments, index)
@@ -983,7 +999,7 @@ fn get_node_from_composite(
 fn get_node_from_array(
   array : IRArray,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   if index == segments.length() {
     return Some(IRArray(array))
@@ -1003,7 +1019,7 @@ fn get_node_from_array(
 fn get_node_from_value(
   value : Value,
   segments : Array[NodePathSegment],
-  index : Int,
+  index : Int32,
 ) -> Node? {
   match value {
     Scalar(scalar) =>
@@ -1126,7 +1142,7 @@ fn reindex_array(array : IRArray, path : NodePath) -> IRArray {
   for i, value in array.values {
     values.push(reindex_value(value, path.append(ArrayItemStep(i))))
   }
-  { values, ast: array.ast, source_path: array.source_path, path: Some(path) }
+  { values, ast: array.ast, source_path: array.source_path, path: Some(path), }
 }
 
 ///|
@@ -1163,7 +1179,7 @@ fn copy_array_detached(array : IRArray) -> IRArray {
   for value in array.values {
     values.push(copy_value_detached(value))
   }
-  { values, ast: array.ast, source_path: array.source_path, path: None }
+  { values, ast: array.ast, source_path: array.source_path, path: None, }
 }
 
 ///|
@@ -1524,7 +1540,7 @@ pub fn Scalar::as_bool(self : Scalar) -> Bool? {
 }
 
 ///|
-pub fn Scalar::as_int(self : Scalar) -> Int? {
+pub fn Scalar::as_int(self : Scalar) -> Int32? {
   match self.value {
     Number(n) => Some(@string.parse_int(n)) catch { _ => None }
     String(s) => Some(@string.parse_int(s.content())) catch { _ => None }

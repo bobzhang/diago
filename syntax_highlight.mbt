@@ -14,6 +14,7 @@
 
 ///|
 /// A lexical category used by source editors.
+#derive(Eq, Debug)
 pub(all) enum SyntaxTokenKind {
   Comment
   String
@@ -23,23 +24,24 @@ pub(all) enum SyntaxTokenKind {
   Identifier
   Operator
   Punctuation
-} derive(Eq, Debug)
+}
 
 ///|
 /// A highlighted source range.
 ///
 /// `start` and `end` are zero-based Unicode code point offsets. The range is
 /// half-open: it includes `start` and excludes `end`.
+#derive(Eq, Debug)
 pub struct SyntaxToken {
-  start : Int
-  end : Int
+  start : Int32
+  end : Int32
   kind : SyntaxTokenKind
-} derive(Eq, Debug)
+}
 
 ///|
 priv struct BlockStringSpan {
-  start : Int
-  end : Int
+  start : Int32
+  end : Int32
 }
 
 ///|
@@ -61,7 +63,7 @@ pub fn get_syntax_tokens(source : String) -> Array[SyntaxToken] {
       let block = block_strings[block_index]
       if token.range.start.offset >= block.start {
         if token.range.start.offset == block.start {
-          highlighted.push({ start: block.start, end: block.end, kind: String })
+          highlighted.push({ start: block.start, end: block.end, kind: String, })
         }
         if token.range.start.offset < block.end {
           continue
@@ -155,7 +157,10 @@ fn find_block_string_spans(
 }
 
 ///|
-fn scan_block_string_span(chars : Array[Char], start : Int) -> BlockStringSpan {
+fn scan_block_string_span(
+  chars : Array[Char],
+  start : Int32,
+) -> BlockStringSpan {
   let mut cursor = start + 1
   let quote = StringBuilder::new()
   while cursor < chars.length() {
@@ -196,7 +201,7 @@ fn scan_block_string_span(chars : Array[Char], start : Int) -> BlockStringSpan {
   } else {
     close_start + marker.length()
   }
-  { start, end }
+  { start, end, }
 }
 
 ///|
@@ -215,7 +220,7 @@ fn is_block_string_space_for_highlight(char : Char) -> Bool {
 ///|
 fn chars_start_with(
   chars : Array[Char],
-  start : Int,
+  start : Int32,
   pattern : Array[Char],
 ) -> Bool {
   for index in 0..<pattern.length() {

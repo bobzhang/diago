@@ -20,6 +20,7 @@
 
 ///|
 /// Position of the legend in the diagram
+#derive(Eq, Debug)
 pub(all) enum LegendPosition {
   TopLeft
   TopRight
@@ -27,7 +28,7 @@ pub(all) enum LegendPosition {
   BottomRight
   /// Legend is not displayed
   Hidden
-} derive(Eq, Debug)
+}
 
 ///|
 /// Parse legend position from string
@@ -56,31 +57,32 @@ pub fn LegendPosition::to_position_string(self : LegendPosition) -> String {
 
 ///|
 /// A single entry in the legend
+#derive(Debug)
 pub(all) enum LegendEntry {
   /// A shape entry with optional custom style
   ShapeEntry(
     id~ : String,
     shape~ : ShapeType,
     label~ : String,
-    style~ : StyleInput?
+    style~ : StyleInput?,
   )
   /// A connection/edge entry showing arrowheads
   ConnectionEntry(
     src_id~ : String,
     dst_id~ : String,
-    index~ : Int,
+    index~ : Int32,
     src_arrow_enabled~ : Bool,
     dst_arrow_enabled~ : Bool,
     src_arrow~ : ArrowheadType,
     dst_arrow~ : ArrowheadType,
     label~ : String,
-    style~ : StyleInput?
+    style~ : StyleInput?,
   )
   /// A custom entry with icon URL or symbol
   CustomEntry(icon~ : String, label~ : String)
   /// A visual separator line
   Separator
-} derive(Debug)
+}
 
 ///|
 /// Create a shape legend entry
@@ -88,7 +90,7 @@ pub fn LegendEntry::shape(
   shape : ShapeType,
   label : String,
   style : StyleInput?,
-  id? : String = label,
+  id~ : String = label,
 ) -> LegendEntry {
   ShapeEntry(id~, shape~, label~, style~)
 }
@@ -100,11 +102,11 @@ pub fn LegendEntry::connection(
   dst_arrow : ArrowheadType,
   label : String,
   style : StyleInput?,
-  src_id? : String = "src",
-  dst_id? : String = "dst",
-  index? : Int = 0,
-  src_arrow_enabled? : Bool = src_arrow != None,
-  dst_arrow_enabled? : Bool = dst_arrow != None,
+  src_id~ : String = "src",
+  dst_id~ : String = "dst",
+  index~ : Int32 = 0,
+  src_arrow_enabled~ : Bool = src_arrow != None,
+  dst_arrow_enabled~ : Bool = dst_arrow != None,
 ) -> LegendEntry {
   ConnectionEntry(
     src_id~,
@@ -133,6 +135,7 @@ pub fn LegendEntry::separator() -> LegendEntry {
 
 ///|
 /// The legend configuration for a diagram
+#derive(Debug)
 pub struct Legend {
   /// Optional title for the legend
   title : String?
@@ -150,7 +153,7 @@ pub struct Legend {
   entry_gap : Double
   /// Size of shape icons in legend
   icon_size : Double
-} derive(Debug)
+}
 
 ///|
 /// Create a new legend with default settings
@@ -209,7 +212,7 @@ pub fn Legend::add_separator(self : Legend) -> Unit {
 
 ///|
 pub fn Legend::set_title(self : Legend, title : String) -> Legend {
-  { ..self, title: Some(title) }
+  { ..self, title: Some(title), }
 }
 
 ///|
@@ -219,12 +222,12 @@ pub fn Legend::set_position(self : Legend, position : LegendPosition) -> Legend 
 
 ///|
 pub fn Legend::set_fill(self : Legend, fill : String) -> Legend {
-  { ..self, fill: Some(fill) }
+  { ..self, fill: Some(fill), }
 }
 
 ///|
 pub fn Legend::set_stroke(self : Legend, stroke : String) -> Legend {
-  { ..self, stroke: Some(stroke) }
+  { ..self, stroke: Some(stroke), }
 }
 
 ///|
@@ -250,7 +253,7 @@ pub fn Legend::is_empty(self : Legend) -> Bool {
 
 ///|
 /// Get the number of entries (excluding separators)
-pub fn Legend::entry_count(self : Legend) -> Int {
+pub fn Legend::entry_count(self : Legend) -> Int32 {
   let mut count = 0
   for entry in self.entries {
     match entry {

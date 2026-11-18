@@ -17,11 +17,12 @@
 
 ///|
 /// Renderer error
+#derive(Eq, Debug)
 pub(all) suberror RenderError {
   UnsupportedFormat(String)
   RenderFailed(String)
   InvalidDiagram(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub impl Show for RenderError with fn output(self, logger) {
@@ -62,18 +63,19 @@ pub fn invalid_diagram(message : String) -> RenderError {
 
 ///|
 /// Base render configuration (common options)
+#derive(Debug)
 pub struct RenderConfig {
   /// Padding around the diagram
   padding : Double
   /// Default font family (for text-based renderers, affects char choice)
   font_family : String
   /// Default font size
-  font_size : Int
+  font_size : Int32
   /// Background color (format-specific: hex/name/none)
   background : String
   /// Whether to use dark mode
   dark_mode : Bool
-} derive(Debug)
+}
 
 ///|
 pub fn RenderConfig::new() -> RenderConfig {
@@ -95,7 +97,7 @@ pub fn RenderConfig::with_padding(padding : Double) -> RenderConfig {
 ///|
 pub fn RenderConfig::dark() -> RenderConfig {
   let cfg = RenderConfig::new()
-  { ..cfg, dark_mode: true, background: "#1a1a2e", font_family: "monospace" }
+  { ..cfg, dark_mode: true, background: "#1a1a2e", font_family: "monospace", }
 }
 
 ///|

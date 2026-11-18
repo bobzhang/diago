@@ -17,6 +17,7 @@
 ///
 /// This mirrors upstream `d2target.ThemeOverrides`, including fixed field
 /// coverage and stable declaration order.
+#derive(Eq, Debug)
 pub struct ThemeOverrides {
   n1 : String?
   n2 : String?
@@ -36,7 +37,7 @@ pub struct ThemeOverrides {
   aa5 : String?
   ab4 : String?
   ab5 : String?
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn ThemeOverrides::new() -> ThemeOverrides {
@@ -116,24 +117,24 @@ pub fn ThemeOverrides::with_code(
   value : String,
 ) -> ThemeOverrides {
   match code.to_upper() {
-    "N1" => { ..self, n1: Some(value) }
-    "N2" => { ..self, n2: Some(value) }
-    "N3" => { ..self, n3: Some(value) }
-    "N4" => { ..self, n4: Some(value) }
-    "N5" => { ..self, n5: Some(value) }
-    "N6" => { ..self, n6: Some(value) }
-    "N7" => { ..self, n7: Some(value) }
-    "B1" => { ..self, b1: Some(value) }
-    "B2" => { ..self, b2: Some(value) }
-    "B3" => { ..self, b3: Some(value) }
-    "B4" => { ..self, b4: Some(value) }
-    "B5" => { ..self, b5: Some(value) }
-    "B6" => { ..self, b6: Some(value) }
-    "AA2" => { ..self, aa2: Some(value) }
-    "AA4" => { ..self, aa4: Some(value) }
-    "AA5" => { ..self, aa5: Some(value) }
-    "AB4" => { ..self, ab4: Some(value) }
-    "AB5" => { ..self, ab5: Some(value) }
+    "N1" => { ..self, n1: Some(value), }
+    "N2" => { ..self, n2: Some(value), }
+    "N3" => { ..self, n3: Some(value), }
+    "N4" => { ..self, n4: Some(value), }
+    "N5" => { ..self, n5: Some(value), }
+    "N6" => { ..self, n6: Some(value), }
+    "N7" => { ..self, n7: Some(value), }
+    "B1" => { ..self, b1: Some(value), }
+    "B2" => { ..self, b2: Some(value), }
+    "B3" => { ..self, b3: Some(value), }
+    "B4" => { ..self, b4: Some(value), }
+    "B5" => { ..self, b5: Some(value), }
+    "B6" => { ..self, b6: Some(value), }
+    "AA2" => { ..self, aa2: Some(value), }
+    "AA4" => { ..self, aa4: Some(value), }
+    "AA5" => { ..self, aa5: Some(value), }
+    "AB4" => { ..self, ab4: Some(value), }
+    "AB5" => { ..self, ab5: Some(value), }
     _ => self
   }
 }

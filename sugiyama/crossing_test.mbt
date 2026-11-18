@@ -189,7 +189,7 @@ fn count_all_crossings(
   layers : Array[Array[String]],
   graph : @graph.GraphInput,
   cycle_result : CycleBreakResult,
-) -> Int {
+) -> Int32 {
   let mut total = 0
   for i = 0; i < layers.length() - 1; i = i + 1 {
     // Collect edges between layer i and i+1

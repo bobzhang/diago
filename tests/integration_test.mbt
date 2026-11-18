@@ -130,7 +130,7 @@ fn compile_ascii(source : String) -> Result[String, String] {
 
 ///|
 /// Count occurrences of a character in a string
-fn count_char(s : String, ch : Char) -> Int {
+fn count_char(s : String, ch : Char) -> Int32 {
   let mut count = 0
   for c in s {
     if c == ch {
@@ -518,7 +518,7 @@ test "grid combined spans" {
 /// Compile diago source to SVG with a specific theme
 fn compile_with_theme(
   source : String,
-  theme_id : Int,
+  theme_id : Int32,
 ) -> Result[String, String] {
   let (ast, errors) = @parser.parse(source)
   if !errors.is_empty() {

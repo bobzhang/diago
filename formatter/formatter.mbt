@@ -18,25 +18,25 @@
 ///|
 pub struct FormatConfig {
   indent : String
-  max_width : Int
+  max_width : Int32
 }
 
 ///|
 pub fn FormatConfig::new() -> FormatConfig {
-  { indent: "  ", max_width: 80 }
+  { indent: "  ", max_width: 80, }
 }
 
 ///|
 priv struct Printer {
   sb : StringBuilder
   config : FormatConfig
-  mut indent_level : Int
+  mut indent_level : Int32
   mut in_key : Bool
 }
 
 ///|
 pub fn format(ast : @ast.Map, config : FormatConfig) -> String {
-  let p = { sb: StringBuilder::new(), config, indent_level: 0, in_key: false }
+  let p = { sb: StringBuilder::new(), config, indent_level: 0, in_key: false, }
   p.format_map(ast, true)
   p.sb.to_string()
 }

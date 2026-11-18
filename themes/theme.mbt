@@ -19,6 +19,7 @@
 
 ///|
 /// Color palette for a theme
+#derive(Debug)
 pub struct ColorPalette {
   /// Neutral colors (N1-N7, dark to light)
   n1 : String
@@ -42,10 +43,11 @@ pub struct ColorPalette {
   /// Alternative colors B (AB4, AB5)
   ab4 : String
   ab5 : String
-} derive(Debug)
+}
 
 ///|
 /// Special rendering rules
+#derive(Debug)
 pub struct SpecialRules {
   /// Apply the C4 model visual hierarchy.
   c4 : Bool
@@ -61,7 +63,7 @@ pub struct SpecialRules {
   caps_lock : Bool
   /// All backgrounds white
   all_paper : Bool
-} derive(Debug)
+}
 
 ///|
 pub fn SpecialRules::default() -> SpecialRules {
@@ -78,16 +80,17 @@ pub fn SpecialRules::default() -> SpecialRules {
 
 ///|
 /// A complete theme definition
+#derive(Debug)
 pub struct Theme {
-  id : Int
+  id : Int32
   name : String
   colors : ColorPalette
   rules : SpecialRules
   is_dark : Bool
-} derive(Debug)
+}
 
 ///|
-pub fn Theme::get_id(self : Theme) -> Int {
+pub fn Theme::get_id(self : Theme) -> Int32 {
   self.id
 }
 
@@ -147,7 +150,7 @@ pub fn Theme::fill_color(self : Theme) -> String {
 
 ///|
 /// Get container fill for nesting level (0 = outermost)
-pub fn Theme::container_fill(self : Theme, level : Int) -> String {
+pub fn Theme::container_fill(self : Theme, level : Int32) -> String {
   match level {
     0 => self.colors.b6
     1 => self.colors.b5
@@ -190,92 +193,92 @@ pub fn Theme::with_overrides(
       } else {
         match override_set.b1 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b1: value } }
+            theme = { ..theme, colors: { ..theme.colors, b1: value, }, }
           None => ()
         }
         match override_set.b2 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b2: value } }
+            theme = { ..theme, colors: { ..theme.colors, b2: value, }, }
           None => ()
         }
         match override_set.b3 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b3: value } }
+            theme = { ..theme, colors: { ..theme.colors, b3: value, }, }
           None => ()
         }
         match override_set.b4 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b4: value } }
+            theme = { ..theme, colors: { ..theme.colors, b4: value, }, }
           None => ()
         }
         match override_set.b5 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b5: value } }
+            theme = { ..theme, colors: { ..theme.colors, b5: value, }, }
           None => ()
         }
         match override_set.b6 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, b6: value } }
+            theme = { ..theme, colors: { ..theme.colors, b6: value, }, }
           None => ()
         }
         match override_set.aa2 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, aa2: value } }
+            theme = { ..theme, colors: { ..theme.colors, aa2: value, }, }
           None => ()
         }
         match override_set.aa4 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, aa4: value } }
+            theme = { ..theme, colors: { ..theme.colors, aa4: value, }, }
           None => ()
         }
         match override_set.aa5 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, aa5: value } }
+            theme = { ..theme, colors: { ..theme.colors, aa5: value, }, }
           None => ()
         }
         match override_set.ab4 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, ab4: value } }
+            theme = { ..theme, colors: { ..theme.colors, ab4: value, }, }
           None => ()
         }
         match override_set.ab5 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, ab5: value } }
+            theme = { ..theme, colors: { ..theme.colors, ab5: value, }, }
           None => ()
         }
         match override_set.n1 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n1: value } }
+            theme = { ..theme, colors: { ..theme.colors, n1: value, }, }
           None => ()
         }
         match override_set.n2 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n2: value } }
+            theme = { ..theme, colors: { ..theme.colors, n2: value, }, }
           None => ()
         }
         match override_set.n3 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n3: value } }
+            theme = { ..theme, colors: { ..theme.colors, n3: value, }, }
           None => ()
         }
         match override_set.n4 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n4: value } }
+            theme = { ..theme, colors: { ..theme.colors, n4: value, }, }
           None => ()
         }
         match override_set.n5 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n5: value } }
+            theme = { ..theme, colors: { ..theme.colors, n5: value, }, }
           None => ()
         }
         match override_set.n6 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n6: value } }
+            theme = { ..theme, colors: { ..theme.colors, n6: value, }, }
           None => ()
         }
         match override_set.n7 {
           Some(value) =>
-            theme = { ..theme, colors: { ..theme.colors, n7: value } }
+            theme = { ..theme, colors: { ..theme.colors, n7: value, }, }
           None => ()
         }
       }

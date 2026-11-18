@@ -22,7 +22,7 @@ pub struct ParseOptions {
 
 ///|
 pub fn ParseOptions::new() -> ParseOptions {
-  { import_resolver: None }
+  { import_resolver: None, }
 }
 
 ///|
@@ -35,13 +35,14 @@ pub fn ParseOptions::with_import_resolver(
 }
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum CompileError {
   ParseError(String)
   IOError(String)
   IrError(String)
   GraphError(String)
   ConfigError(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub struct CompileResult {
@@ -73,7 +74,7 @@ pub fn parse(source : String) -> (@ast.Map, @parser.ParseErrors) {
 ///|
 pub fn compile_ir(
   source : String,
-  options? : ParseOptions = ParseOptions::new(),
+  options~ : ParseOptions = ParseOptions::new(),
 ) -> Result[@ir.Map, CompileError] {
   let (ast, errors) = parse(source)
   if !errors.is_empty() {
@@ -91,7 +92,7 @@ pub fn compile_ir(
 pub fn compile_graph(
   name : String,
   source : String,
-  options? : ParseOptions = ParseOptions::new(),
+  options~ : ParseOptions = ParseOptions::new(),
 ) -> Result[CompileResult, CompileError] {
   let ir_map = match compile_ir(source, options~) {
     Ok(ir_map) => ir_map
@@ -120,5 +121,5 @@ pub fn compile_graph(
     is_folder_only=base_graph_input.is_folder_only,
     data=graph_data_from_source_config(source_config),
   )
-  Ok({ ir_map, graph_input, source_config })
+  Ok({ ir_map, graph_input, source_config, })
 }

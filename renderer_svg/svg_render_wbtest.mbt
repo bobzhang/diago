@@ -15,16 +15,16 @@
 ///|
 fn test_object_input(
   box : @graph.Box,
-  label? : String = "",
-  shape_type? : @graph.ShapeType = Rectangle,
-  style? : @graph.StyleInput = @graph.StyleInput::new(),
-  label_box? : @graph.Box? = None,
-  child_ids? : Array[String] = [],
-  label_position? : String? = None,
-  icon? : String? = None,
-  icon_position? : String? = None,
-  tooltip? : String? = None,
-  tooltip_position? : String? = None,
+  label~ : String = "",
+  shape_type~ : @graph.ShapeType = Rectangle,
+  style~ : @graph.StyleInput = @graph.StyleInput::new(),
+  label_box~ : @graph.Box? = None,
+  child_ids~ : Array[String] = [],
+  label_position~ : String? = None,
+  icon~ : String? = None,
+  icon_position~ : String? = None,
+  tooltip~ : String? = None,
+  tooltip_position~ : String? = None,
 ) -> @graph.ObjectInput {
   @graph.ObjectInput::from_parts(
     "node",
@@ -76,12 +76,12 @@ fn test_diagram_with_object(obj : @graph.ObjectInput) -> @diagram.Diagram {
 
 ///|
 fn test_edge_input(
-  label? : String = "",
-  label_box? : @graph.Box? = None,
-  icon? : String? = None,
-  icon_position? : String? = None,
-  icon_border_radius? : Double? = None,
-  link? : String? = None,
+  label~ : String = "",
+  label_box~ : @graph.Box? = None,
+  icon~ : String? = None,
+  icon_position~ : String? = None,
+  icon_border_radius~ : Double? = None,
+  link~ : String? = None,
 ) -> @graph.EdgeInput {
   @graph.EdgeInput::from_parts(
     0,
